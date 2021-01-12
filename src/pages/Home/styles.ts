@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
+import { purple } from '@material-ui/core/colors';
 
 const useStyles = makeStyles(theme => ({
   toolbar: {
@@ -7,7 +8,7 @@ const useStyles = makeStyles(theme => ({
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
-    backgroundColor: '#e7e7e7',
+    backgroundColor: purple['50'],
   },
   /* lastForms: {
     display: 'flex',
