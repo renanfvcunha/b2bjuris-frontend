@@ -35,6 +35,7 @@
         }
     },
     "rules": {
+        "prettierx/options": "warn",
         "no-use-before-define": "off",
         "@typescript-eslint/no-use-before-define": "error",
         "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }],
@@ -45,6 +46,9 @@
               "ts": "never",
               "tsx": "never"
             }
-          ]
+          ],
+        "camelcase": "off",
+        "react/jsx-props-no-spreading": "off",
+        "@typescript-eslint/no-explicit-any": "off"
     }
 }
