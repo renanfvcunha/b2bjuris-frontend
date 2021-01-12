@@ -1,17 +1,17 @@
 import React, { useContext } from 'react';
 
 import { AuthContext } from './contexts/auth';
-import Home from './pages/Home';
+import Menu from './components/Menu';
 import Login from './pages/Login';
 
 const Auth: React.FC = () => {
   const { signed } = useContext(AuthContext);
 
-  if (signed) {
-    return <Home />;
+  if (!signed) {
+    return <Login />;
   }
 
-  return <Login />;
+  return <Menu />;
 };
 
 export default Auth;

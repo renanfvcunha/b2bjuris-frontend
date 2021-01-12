@@ -15,6 +15,7 @@ interface AuthContextData {
     tipo_usuario: string;
   } | null;
   signIn(nomeUsuario: string, senha: string): Promise<void>;
+  signOut(): void;
 }
 
 export const AuthContext = createContext<AuthContextData>(
@@ -66,6 +67,13 @@ const AuthProvider: React.FC = ({ children }) => {
     setLoading(false);
   };
 
+  const signOut = () => {
+    localStorage.removeItem('@Auth:user');
+    localStorage.removeItem('@Auth:token');
+
+    setUsuario(null);
+  };
+
   useEffect(() => {
     const storagedUser = localStorage.getItem('@Auth:user');
     const storagedToken = localStorage.getItem('@Auth:token');
@@ -85,8 +93,9 @@ const AuthProvider: React.FC = ({ children }) => {
         error,
         setErrorFalse,
         modalMsg,
-        usuario: null,
+        usuario,
         signIn,
+        signOut,
       }}
     >
       {children}

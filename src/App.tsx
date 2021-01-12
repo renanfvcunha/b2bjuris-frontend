@@ -1,16 +1,16 @@
 import React from 'react';
 import Auth from './Auth';
 
-import AuthContext from './contexts/auth';
+import AuthProvider from './contexts/auth';
 import Login from './pages/Login';
 
 const App: React.FC = () => {
   return (
-    <AuthContext>
+    <AuthProvider>
       <Auth>
         <Login />
       </Auth>
-    </AuthContext>
+    </AuthProvider>
   );
 };
 
