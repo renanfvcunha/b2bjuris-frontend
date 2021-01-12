@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useLayoutEffect } from 'react';
 import { BrowserRouter, Link } from 'react-router-dom';
 import clsx from 'clsx';
 import {
@@ -21,10 +21,10 @@ import {
   ChevronLeft,
   ChevronRight,
   Group,
-  GroupOutlined,
-  Assignment,
+  // GroupOutlined,
+  // Assignment,
   ExitToApp,
-  Room,
+  // Room,
 } from '@material-ui/icons';
 
 import { useStyles, Purple } from './styles';
@@ -37,6 +37,8 @@ const Menu: React.FC = () => {
   const { usuario, signOut } = useContext(AuthContext);
 
   const [open, setOpen] = useState(false);
+  const [changePathName, setChangePathName] = useState(false);
+  const [pathName, setPathName] = useState('');
 
   function handleDrawerOpen() {
     setOpen(true);
@@ -45,6 +47,13 @@ const Menu: React.FC = () => {
   function handleDrawerClose() {
     setOpen(false);
   }
+
+  useLayoutEffect(() => {
+    if (changePathName) {
+      setPathName(window.location.pathname.split('/')[1]);
+      setChangePathName(false);
+    }
+  }, [changePathName]);
 
   return (
     <div className={classes.root}>
@@ -118,7 +127,11 @@ const Menu: React.FC = () => {
 
           <Link to="/" className={classes.link}>
             <List>
-              <ListItem button selected={window.location.pathname === '/'}>
+              <ListItem
+                button
+                onClick={() => setChangePathName(true)}
+                selected={pathName === ''}
+              >
                 <ListItemIcon>
                   <Home className={classes.icon} />
                 </ListItemIcon>
@@ -127,7 +140,7 @@ const Menu: React.FC = () => {
             </List>
           </Link>
 
-          <Link to="/forms" className={classes.link}>
+          {/* <Link to="/forms" className={classes.link}>
             <List>
               <ListItem
                 button
@@ -167,13 +180,14 @@ const Menu: React.FC = () => {
                 <ListItemText primary="Mapa" />
               </ListItem>
             </List>
-          </Link>
+          </Link> */}
 
-          <Link to="/users" className={classes.link}>
+          <Link to="/usuarios" className={classes.link}>
             <List>
               <ListItem
                 button
-                selected={window.location.pathname.split('/')[1] === 'users'}
+                onClick={() => setChangePathName(true)}
+                selected={pathName === 'usuarios'}
               >
                 <ListItemIcon>
                   <Group className={classes.icon} />
