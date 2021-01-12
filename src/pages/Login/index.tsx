@@ -8,7 +8,7 @@ import {
 } from '@material-ui/core';
 
 import useStyles from './styles';
-import { AuthContext } from '../../contexts/auth';
+import { AuthContext } from '../../contexts/authContext';
 import ModalAlert from '../../components/ModalAlert';
 
 const Login: React.FC = () => {

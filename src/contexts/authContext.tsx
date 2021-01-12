@@ -82,7 +82,9 @@ const AuthProvider: React.FC = ({ children }) => {
       setUsuario(JSON.parse(storagedUser));
     }
 
-    api.defaults.headers.Authorization = `Bearer ${storagedToken}`;
+    if (storagedToken) {
+      api.defaults.headers.Authorization = `Bearer ${storagedToken}`;
+    }
   }, []);
 
   return (

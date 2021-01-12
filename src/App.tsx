@@ -1,7 +1,7 @@
 import React from 'react';
 import Auth from './Auth';
 
-import AuthProvider from './contexts/auth';
+import AuthProvider from './contexts/authContext';
 import Login from './pages/Login';
 
 const App: React.FC = () => {

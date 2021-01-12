@@ -29,7 +29,7 @@ import {
 
 import { useStyles, Purple } from './styles';
 import Routes from '../../routes';
-import { AuthContext } from '../../contexts/auth';
+import { AuthContext } from '../../contexts/authContext';
 
 const Menu: React.FC = () => {
   const classes = useStyles();

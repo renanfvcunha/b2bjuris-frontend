@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import { AuthContext } from './contexts/auth';
+import { AuthContext } from './contexts/authContext';
 import Menu from './components/Menu';
 import Login from './pages/Login';
 
