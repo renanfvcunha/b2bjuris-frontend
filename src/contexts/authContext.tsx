@@ -41,6 +41,7 @@ const AuthProvider: React.FC = ({ children }) => {
       const response = await api.post('/session', {
         nome_usuario,
         senha,
+        lembrar: true,
       });
 
       setUsuario(response.data.user);

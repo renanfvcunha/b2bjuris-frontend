@@ -1,4 +1,4 @@
-import React, { useState, forwardRef } from 'react';
+import React, { useState, forwardRef, createRef, RefObject } from 'react';
 import MaterialTable, { Icons, MTableToolbar } from 'material-table';
 import { Fab, ThemeProvider, Tooltip } from '@material-ui/core';
 import {
@@ -16,14 +16,44 @@ import {
 } from '@material-ui/icons';
 
 import useStyles, { theme } from './styles';
+import api from '../../services/api';
 import NovoUsuario from './NovoUsuario';
+import ModalAlert from '../../components/ModalAlert';
+
+interface ModalAlertData {
+  title: string;
+  msg: string;
+}
 
 const Usuarios: React.FC = () => {
   const classes = useStyles();
+  const tableRef: RefObject<any> = createRef();
+
   const [newUserOpen, setNewUserOpen] = useState(false);
+  const [modalAlert, setModalAlert] = useState(false);
+  const [modalAlertData, setModalAlertData] = useState<ModalAlertData>({
+    title: '',
+    msg: '',
+  });
+
+  /* const refreshTable = useCallback(() => {
+    tableRef.current.onQueryChange();
+  }, [tableRef]); */
 
   const handleCloseNewUser = () => {
     setNewUserOpen(false);
+  };
+
+  const handleCloseModalAlert = () => {
+    setModalAlert(false);
+  };
+
+  const dataRequestFailure = (errorMsg: string) => {
+    setModalAlertData({
+      title: 'Erro',
+      msg: errorMsg,
+    });
+    setModalAlert(true);
   };
 
   const tableIcons: Icons = {
@@ -48,7 +78,7 @@ const Usuarios: React.FC = () => {
           <ThemeProvider theme={theme}>
             <MaterialTable
               title="Lista de Usuários"
-              // tableRef={tableRef}
+              tableRef={tableRef}
               columns={[
                 {
                   title: 'ID',
@@ -69,24 +99,16 @@ const Usuarios: React.FC = () => {
                   align: 'left',
                 },
                 {
+                  title: 'E-mail',
+                  field: 'email',
+                  type: 'string',
+                  align: 'left',
+                },
+                {
                   title: 'Tipo de Usuário',
                   field: 'tipo_usuario',
                   type: 'string',
                   align: 'left',
-                },
-              ]}
-              data={[
-                {
-                  id: 1,
-                  nome: 'Renan Cunha',
-                  nome_usuario: 'renancunha',
-                  tipo_usuario: 'Admin',
-                },
-                {
-                  id: 2,
-                  nome: 'José Carlos',
-                  nome_usuario: 'zeca',
-                  tipo_usuario: 'Usuário',
                 },
               ]}
               components={{
@@ -106,24 +128,39 @@ const Usuarios: React.FC = () => {
                   </div>
                 ),
               }}
-              /* data={query =>
-              new Promise((resolve, reject) => {
-                const url = `users?per_page=${query.pageSize}&page=${
-                  query.page + 1
-                }&search=${query.search}`;
-                api
-                  .get(url)
-                  .then(response => {
-                    resolve({
-                      data: response.data.users,
-                      page: response.data.page - 1,
-                      totalCount: response.data.total,
+              data={query =>
+                new Promise((resolve, reject) => {
+                  const url = `usuarios?per_page=${query.pageSize}&page=${
+                    query.page + 1
+                  }&search=${query.search}`;
+                  api
+                    .get(url)
+                    .then(response => {
+                      resolve({
+                        data: response.data.users,
+                        page: response.data.page - 1,
+                        totalCount: response.data.total,
+                      });
+                    })
+                    .catch(err => {
+                      if (err.message === 'Network Error') {
+                        reject(
+                          dataRequestFailure(
+                            'Não foi possível conectar ao servidor. Tente novamente ou contate o suporte.'
+                          )
+                        );
+                      } else if (err.response) {
+                        reject(dataRequestFailure(err.response.data.msg));
+                      } else {
+                        reject(
+                          dataRequestFailure(
+                            'Ocorreu um erro na requisição dos dados.'
+                          )
+                        );
+                      }
                     });
-                  })
-                  .catch(() => {
-                    reject(dataRequestFailure());
-                  });
-              })} */
+                })
+              }
               actions={[
                 {
                   icon: () => <Edit color="secondary" />,
@@ -143,9 +180,7 @@ const Usuarios: React.FC = () => {
                   icon: () => <Refresh />,
                   tooltip: 'Atualizar',
                   isFreeAction: true,
-                  onClick: () => {
-                    alert('Dados Atualizados.');
-                  },
+                  onClick: () => tableRef.current.onQueryChange(),
                 },
               ]}
               icons={tableIcons}
@@ -183,6 +218,12 @@ const Usuarios: React.FC = () => {
         </div>
       </div>
       <NovoUsuario open={newUserOpen} close={handleCloseNewUser} />
+      <ModalAlert
+        open={modalAlert}
+        close={handleCloseModalAlert}
+        title={modalAlertData.title}
+        msg={modalAlertData.msg}
+      />
     </main>
   );
 };
