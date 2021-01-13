@@ -1,4 +1,4 @@
-import React, { useState, useContext, useLayoutEffect } from 'react';
+import React, { useState, useContext, useLayoutEffect, useEffect } from 'react';
 import { BrowserRouter, Link } from 'react-router-dom';
 import clsx from 'clsx';
 import {
@@ -47,6 +47,10 @@ const Menu: React.FC = () => {
   function handleDrawerClose() {
     setOpen(false);
   }
+
+  useEffect(() => {
+    setPathName(window.location.pathname.split('/')[1]);
+  }, []);
 
   useLayoutEffect(() => {
     if (changePathName) {

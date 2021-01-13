@@ -57,10 +57,10 @@ export const theme = createMuiTheme({
   },
   palette: {
     primary: {
-      main: '#654d7d',
+      main: defaultStyles.purpleLight,
     },
     secondary: {
-      main: '#462e5e',
+      main: defaultStyles.purpleDark,
     },
   },
 });

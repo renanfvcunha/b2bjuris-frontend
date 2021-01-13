@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { useState, forwardRef } from 'react';
 import MaterialTable, { Icons, MTableToolbar } from 'material-table';
 import { Fab, ThemeProvider, Tooltip } from '@material-ui/core';
 import {
@@ -16,9 +16,15 @@ import {
 } from '@material-ui/icons';
 
 import useStyles, { theme } from './styles';
+import NovoUsuario from './NovoUsuario';
 
 const Usuarios: React.FC = () => {
   const classes = useStyles();
+  const [newUserOpen, setNewUserOpen] = useState(false);
+
+  const handleCloseNewUser = () => {
+    setNewUserOpen(false);
+  };
 
   const tableIcons: Icons = {
     FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
@@ -91,6 +97,7 @@ const Usuarios: React.FC = () => {
                       title="Adicionar Usuário"
                       aria-label="addUser"
                       className={classes.addUserBtn}
+                      onClick={() => setNewUserOpen(true)}
                     >
                       <Fab color="primary" size="small">
                         <Add />
@@ -175,6 +182,7 @@ const Usuarios: React.FC = () => {
           </ThemeProvider>
         </div>
       </div>
+      <NovoUsuario open={newUserOpen} close={handleCloseNewUser} />
     </main>
   );
 };

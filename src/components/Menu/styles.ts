@@ -1,5 +1,7 @@
 import { makeStyles, createMuiTheme } from '@material-ui/core/styles';
 
+import defaultStyles from '../../utils/defaultStyles';
+
 const drawerWidth = 240;
 
 export const useStyles = makeStyles(theme => ({
@@ -48,7 +50,7 @@ export const useStyles = makeStyles(theme => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
     color: '#fff',
-    backgroundColor: '#654d7d',
+    backgroundColor: defaultStyles.purpleLight,
   },
   drawerClose: {
     transition: theme.transitions.create('width', {
@@ -61,7 +63,7 @@ export const useStyles = makeStyles(theme => ({
       width: theme.spacing(9) + 1,
     },
     color: '#fff',
-    backgroundColor: '#654d7d',
+    backgroundColor: defaultStyles.purpleLight,
   },
   welcome: {
     fontSize: 20,
@@ -92,7 +94,7 @@ export const useStyles = makeStyles(theme => ({
 export const Purple = createMuiTheme({
   palette: {
     primary: {
-      main: '#654d7d',
+      main: defaultStyles.purpleLight,
     },
   },
 });
