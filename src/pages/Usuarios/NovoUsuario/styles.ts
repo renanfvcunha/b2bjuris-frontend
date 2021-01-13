@@ -49,6 +49,11 @@ const useStyles = makeStyles((theme: Theme) =>
     field: {
       margin: theme.spacing(1),
     },
+    progress: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
     subButton: {
       margin: theme.spacing(1),
       marginTop: 8,

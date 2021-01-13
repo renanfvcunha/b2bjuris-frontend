@@ -36,9 +36,9 @@ const Usuarios: React.FC = () => {
     msg: '',
   });
 
-  /* const refreshTable = useCallback(() => {
+  const refreshTable = () => {
     tableRef.current.onQueryChange();
-  }, [tableRef]); */
+  };
 
   const handleCloseNewUser = () => {
     setNewUserOpen(false);
@@ -180,7 +180,7 @@ const Usuarios: React.FC = () => {
                   icon: () => <Refresh />,
                   tooltip: 'Atualizar',
                   isFreeAction: true,
-                  onClick: () => tableRef.current.onQueryChange(),
+                  onClick: refreshTable,
                 },
               ]}
               icons={tableIcons}
@@ -217,7 +217,11 @@ const Usuarios: React.FC = () => {
           </ThemeProvider>
         </div>
       </div>
-      <NovoUsuario open={newUserOpen} close={handleCloseNewUser} />
+      <NovoUsuario
+        open={newUserOpen}
+        close={handleCloseNewUser}
+        refreshData={refreshTable}
+      />
       <ModalAlert
         open={modalAlert}
         close={handleCloseModalAlert}

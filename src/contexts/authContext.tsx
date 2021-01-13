@@ -47,6 +47,7 @@ const AuthProvider: React.FC = ({ children }) => {
       setUsuario(response.data.user);
 
       api.defaults.headers.Authorization = `Bearer ${response.data.token}`;
+      api.defaults.headers['Content-Type'] = 'application/json';
 
       localStorage.setItem('@Auth:user', JSON.stringify(response.data.user));
       localStorage.setItem('@Auth:token', response.data.token);
@@ -85,6 +86,7 @@ const AuthProvider: React.FC = ({ children }) => {
 
     if (storagedToken) {
       api.defaults.headers.Authorization = `Bearer ${storagedToken}`;
+      api.defaults.headers['Content-Type'] = 'application/json';
     }
   }, []);
 
