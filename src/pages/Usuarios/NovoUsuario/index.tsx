@@ -25,10 +25,10 @@ import api from '../../../services/api';
 interface IModal {
   open: boolean;
   close(): void;
-  refreshData(): void;
+  setSuccess(): void;
 }
 
-const NovoUsuario: React.FC<IModal> = ({ open, close, refreshData }) => {
+const NovoUsuario: React.FC<IModal> = ({ open, close, setSuccess }) => {
   const classes = useStyles();
 
   const [loading, setLoading] = useState(false);
@@ -69,7 +69,7 @@ const NovoUsuario: React.FC<IModal> = ({ open, close, refreshData }) => {
       toast.success(response.data.msg, {
         position: 'top-center',
       });
-      refreshData();
+      setSuccess();
       clearFields();
       close();
     } catch (err) {
@@ -225,7 +225,7 @@ const NovoUsuario: React.FC<IModal> = ({ open, close, refreshData }) => {
 NovoUsuario.propTypes = {
   open: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
-  refreshData: PropTypes.func.isRequired,
+  setSuccess: PropTypes.func.isRequired,
 };
 
 export default NovoUsuario;

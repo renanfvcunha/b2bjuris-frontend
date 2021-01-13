@@ -1,4 +1,11 @@
-import React, { useState, forwardRef, createRef, RefObject } from 'react';
+import React, {
+  useState,
+  useEffect,
+  forwardRef,
+  createRef,
+  RefObject,
+  useCallback,
+} from 'react';
 import MaterialTable, { Icons, MTableToolbar } from 'material-table';
 import { Fab, ThemeProvider, Tooltip } from '@material-ui/core';
 import {
@@ -14,11 +21,13 @@ import {
   Delete,
   Refresh,
 } from '@material-ui/icons';
+import { toast } from 'react-toastify';
 
 import useStyles, { theme } from './styles';
 import api from '../../services/api';
 import NovoUsuario from './NovoUsuario';
 import ModalAlert from '../../components/ModalAlert';
+import ModalConfirmation from '../../components/ModalConfirmation';
 
 interface ModalAlertData {
   title: string;
@@ -35,17 +44,65 @@ const Usuarios: React.FC = () => {
     title: '',
     msg: '',
   });
+  const [modalConfirmation, setModalConfirmation] = useState(false);
+  const [name, setName] = useState('');
+  const [userToRemove, setUserToRemove] = useState(0);
+  const [success, setSuccess] = useState(false);
 
-  const refreshTable = () => {
-    tableRef.current.onQueryChange();
+  const refreshTable = useCallback(() => {
+    if (success) {
+      tableRef.current.onQueryChange();
+    }
+  }, [success, tableRef]);
+
+  const setSuccessTrue = () => {
+    setSuccess(true);
   };
 
   const handleCloseNewUser = () => {
     setNewUserOpen(false);
   };
 
-  const handleCloseModalAlert = () => {
-    setModalAlert(false);
+  const handleCloseModal = () => {
+    if (modalAlert) {
+      setModalAlert(false);
+    } else if (modalConfirmation) {
+      setModalConfirmation(false);
+    }
+  };
+
+  const handleRemoveUser = async () => {
+    setModalConfirmation(false);
+
+    try {
+      const response = await api.delete(`/usuarios/${userToRemove}`);
+
+      setSuccess(true);
+
+      toast.success(response.data.msg, {
+        position: 'top-center',
+      });
+    } catch (err) {
+      if (err.message === 'Network Error') {
+        toast.error(
+          'Não foi possível conectar ao servidor. Tente novamente ou contate o suporte.',
+          {
+            position: 'top-center',
+          }
+        );
+      } else if (err.response) {
+        toast.error(err.response.data.msg, {
+          position: 'top-center',
+        });
+      } else {
+        toast.error(
+          'Erro ao remover usuário. Tente novamente ou contate o suporte.',
+          {
+            position: 'top-center',
+          }
+        );
+      }
+    }
   };
 
   const dataRequestFailure = (errorMsg: string) => {
@@ -69,6 +126,14 @@ const Usuarios: React.FC = () => {
       <ArrowDownward {...props} ref={ref} />
     )),
   };
+
+  useEffect(() => {
+    refreshTable();
+
+    if (success) {
+      setSuccess(false);
+    }
+  }, [refreshTable, success]);
 
   return (
     <main className={classes.content}>
@@ -172,15 +237,17 @@ const Usuarios: React.FC = () => {
                 {
                   icon: () => <Delete color="secondary" />,
                   tooltip: 'Remover Usuário',
-                  onClick: () => {
-                    alert('Usuário Removido');
+                  onClick: (event, rowData: any) => {
+                    setModalConfirmation(true);
+                    setName(rowData.nome);
+                    setUserToRemove(rowData.id);
                   },
                 },
                 {
                   icon: () => <Refresh />,
                   tooltip: 'Atualizar',
                   isFreeAction: true,
-                  onClick: refreshTable,
+                  onClick: () => tableRef.current.onQueryChange(),
                 },
               ]}
               icons={tableIcons}
@@ -220,13 +287,27 @@ const Usuarios: React.FC = () => {
       <NovoUsuario
         open={newUserOpen}
         close={handleCloseNewUser}
-        refreshData={refreshTable}
+        setSuccess={setSuccessTrue}
       />
       <ModalAlert
         open={modalAlert}
-        close={handleCloseModalAlert}
+        close={handleCloseModal}
         title={modalAlertData.title}
         msg={modalAlertData.msg}
+      />
+      <ModalConfirmation
+        open={modalConfirmation}
+        close={handleCloseModal}
+        confirmAction={handleRemoveUser}
+        title="Alerta de Exclusão"
+        msg={
+          <span>
+            Deseja remover permanentemente{' '}
+            <span style={{ fontWeight: 'bold' }}>{name}</span>?
+          </span>
+        }
+        cancel="Cancelar"
+        confirm="Remover"
       />
     </main>
   );
