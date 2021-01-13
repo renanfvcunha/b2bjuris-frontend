@@ -1,5 +1,6 @@
 import { makeStyles, createMuiTheme } from '@material-ui/core/styles';
-import { purple } from '@material-ui/core/colors';
+
+import defaultStyles from '../../utils/defaultStyles';
 
 const useStyles = makeStyles(theme => ({
   toolbar: {
@@ -8,7 +9,7 @@ const useStyles = makeStyles(theme => ({
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
-    backgroundColor: purple['50'],
+    backgroundColor: defaultStyles.defaultBackground,
   },
   iconAdd: {
     marginRight: 8,
