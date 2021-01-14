@@ -1,0 +1,68 @@
+import { makeStyles, createMuiTheme } from '@material-ui/core/styles';
+
+import defaultStyles from '../../utils/defaultStyles';
+
+const useStyles = makeStyles(theme => ({
+  toolbar: {
+    ...theme.mixins.toolbar,
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    backgroundColor: defaultStyles.defaultBackground,
+  },
+  iconAdd: {
+    marginRight: 8,
+  },
+  tableBox: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: '5%',
+  },
+  table: {
+    width: '100%',
+    maxWidth: 1140,
+    height: 640,
+  },
+  addUserBtn: {
+    position: 'absolute',
+    top: 12,
+    left: 200,
+  },
+}));
+
+export const theme = createMuiTheme({
+  overrides: {
+    MuiButton: {
+      containedPrimary: {
+        color: '#fff',
+      },
+    },
+    MuiTableSortLabel: {
+      root: {
+        '&:hover': {
+          color: 'rgba(255, 255, 255, 0.75)',
+        },
+      },
+    },
+    MuiTableRow: {
+      root: {
+        '&:hover': {
+          backgroundColor: '#f0f0f0 !important',
+          cursor: 'default',
+        },
+      },
+    },
+  },
+  palette: {
+    primary: {
+      main: defaultStyles.purpleLight,
+    },
+    secondary: {
+      main: defaultStyles.purpleDark,
+    },
+  },
+});
+
+export default useStyles;

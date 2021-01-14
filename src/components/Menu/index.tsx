@@ -1,4 +1,4 @@
-import React, { useState, useContext, useLayoutEffect, useEffect } from 'react';
+import React, { useState, useContext, useLayoutEffect } from 'react';
 import { BrowserRouter, Link } from 'react-router-dom';
 import clsx from 'clsx';
 import {
@@ -21,10 +21,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Group,
-  // GroupOutlined,
-  // Assignment,
   ExitToApp,
-  // Room,
+  Assignment,
 } from '@material-ui/icons';
 
 import { useStyles, Purple } from './styles';
@@ -48,7 +46,7 @@ const Menu: React.FC = () => {
     setOpen(false);
   }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setPathName(window.location.pathname.split('/')[1]);
   }, []);
 
@@ -144,47 +142,20 @@ const Menu: React.FC = () => {
             </List>
           </Link>
 
-          {/* <Link to="/forms" className={classes.link}>
+          <Link to="/processos" className={classes.link}>
             <List>
               <ListItem
                 button
-                selected={window.location.pathname.split('/')[1] === 'forms'}
+                onClick={() => setChangePathName(true)}
+                selected={pathName === 'processos'}
               >
                 <ListItemIcon>
                   <Assignment className={classes.icon} />
                 </ListItemIcon>
-                <ListItemText primary="Formulários" />
+                <ListItemText primary="Processos" />
               </ListItem>
             </List>
           </Link>
-
-          <Link to="/groups" className={classes.link}>
-            <List>
-              <ListItem
-                button
-                selected={window.location.pathname.split('/')[1] === 'groups'}
-              >
-                <ListItemIcon>
-                  <GroupOutlined className={classes.icon} />
-                </ListItemIcon>
-                <ListItemText primary="Grupos" />
-              </ListItem>
-            </List>
-          </Link>
-
-          <Link to="/map" className={classes.link}>
-            <List>
-              <ListItem
-                button
-                selected={window.location.pathname.split('/')[1] === 'map'}
-              >
-                <ListItemIcon>
-                  <Room className={classes.icon} />
-                </ListItemIcon>
-                <ListItemText primary="Mapa" />
-              </ListItem>
-            </List>
-          </Link> */}
 
           <Link to="/usuarios" className={classes.link}>
             <List>
