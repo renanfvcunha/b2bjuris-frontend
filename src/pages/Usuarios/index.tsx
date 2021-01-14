@@ -5,6 +5,7 @@ import React, {
   createRef,
   RefObject,
   useCallback,
+  useContext,
 } from 'react';
 import MaterialTable, { Icons, MTableToolbar } from 'material-table';
 import { Fab, ThemeProvider, Tooltip } from '@material-ui/core';
@@ -25,6 +26,7 @@ import { toast } from 'react-toastify';
 
 import useStyles, { theme } from './styles';
 import api from '../../services/api';
+import { PageTitleContext } from '../../contexts/pageTitleContext';
 import NovoUsuario from './NovoUsuario';
 import ModalAlert from '../../components/ModalAlert';
 import ModalConfirmation from '../../components/ModalConfirmation';
@@ -37,6 +39,7 @@ interface ModalAlertData {
 const Usuarios: React.FC = () => {
   const classes = useStyles();
   const tableRef: RefObject<any> = createRef();
+  const { handleSetPageTitle } = useContext(PageTitleContext);
 
   const [newUserOpen, setNewUserOpen] = useState(false);
   const [modalAlert, setModalAlert] = useState(false);
@@ -134,6 +137,11 @@ const Usuarios: React.FC = () => {
       setSuccess(false);
     }
   }, [refreshTable, success]);
+
+  useEffect(() => {
+    document.title = 'Usuários - B2B Juris';
+    handleSetPageTitle('Usuários');
+  }, [handleSetPageTitle]);
 
   return (
     <main className={classes.content}>

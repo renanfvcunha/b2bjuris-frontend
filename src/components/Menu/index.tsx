@@ -28,11 +28,13 @@ import {
 import { useStyles, Purple } from './styles';
 import Routes from '../../routes';
 import { AuthContext } from '../../contexts/authContext';
+import { PageTitleContext } from '../../contexts/pageTitleContext';
 
 const Menu: React.FC = () => {
   const classes = useStyles();
   const theme = useTheme();
   const { usuario, signOut } = useContext(AuthContext);
+  const { pageTitle } = useContext(PageTitleContext);
 
   const [open, setOpen] = useState(false);
   const [changePathName, setChangePathName] = useState(false);
@@ -82,7 +84,7 @@ const Menu: React.FC = () => {
                 <MdMenu />
               </IconButton>
               <Typography variant="h6" noWrap style={{ display: 'inline' }}>
-                Título de Teste
+                {pageTitle}
               </Typography>
             </div>
             <img
