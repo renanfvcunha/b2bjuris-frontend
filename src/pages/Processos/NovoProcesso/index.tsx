@@ -4,6 +4,7 @@ import React, {
   useEffect,
   createRef,
   RefObject,
+  FormEvent,
 } from 'react';
 import {
   TextField,
@@ -23,27 +24,73 @@ import {
 import axios from 'axios';
 
 import useStyles, { Purple } from './styles';
+import api from '../../../services/api';
 
 const NovoProcesso: React.FC = () => {
   const classes = useStyles();
   const inputFileRef: RefObject<HTMLInputElement> = createRef();
 
-  const [tipoProcesso, setTipoProcesso] = useState('');
-  const [UFs, setUFs] = useState<string[]>([]);
-  const [selectedUF, setSelectedUF] = useState('');
+  const [processo, setProcesso] = useState({
+    numProcesso: '',
+    nomeParte: '',
+    assunto: '',
+    tipoProcesso: '',
+  });
+
+  const [administrativo, setAdministrativo] = useState({
+    matricula: '',
+    cpf: '',
+    endereco: '',
+    numero: '',
+    complemento: '',
+    bairro: '',
+    uf: '',
+    cidade: '',
+    telefone: '',
+    observacoes: '',
+  });
+
+  const [assuntos, setAssuntos] = useState([
+    {
+      id: 0,
+      assunto: '',
+    },
+  ]);
+  const [ufs, setUfs] = useState<string[]>([]);
   const [cidades, setCidades] = useState<string[]>([]);
-  const [selectedCity, setSelectedCity] = useState('');
 
   const handleChangeTipoProcesso = (e: ChangeEvent<HTMLInputElement>) => {
-    setTipoProcesso(e.target.value);
+    setProcesso({
+      ...processo,
+      tipoProcesso: e.target.value,
+    });
   };
 
   const handleSelectUF = (e: ChangeEvent<{ value: unknown }>) => {
-    setSelectedUF(e.target.value as string);
+    setAdministrativo({ ...administrativo, uf: e.target.value as string });
   };
 
   const handleSelectCity = (e: ChangeEvent<{ value: unknown }>) => {
-    setSelectedCity(e.target.value as string);
+    setAdministrativo({ ...administrativo, cidade: e.target.value as string });
+  };
+
+  const handleSelectAssunto = (e: ChangeEvent<{ value: unknown }>) => {
+    setProcesso({
+      ...processo,
+      assunto: e.target.value as string,
+    });
+  };
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+
+    let sendProcesso = {};
+
+    if (processo.tipoProcesso === 'administrativo') {
+      sendProcesso = Object.assign(processo, administrativo);
+    }
+
+    console.log(sendProcesso);
   };
 
   useEffect(() => {
@@ -54,16 +101,23 @@ const NovoProcesso: React.FC = () => {
 
       const siglas = response.data.map((estado: any) => estado.sigla);
 
-      setUFs(siglas);
+      setUfs(siglas);
     };
 
+    const getAssuntos = async () => {
+      const response = await api.get('/assuntos');
+
+      setAssuntos(response.data);
+    };
+
+    getAssuntos();
     getUFs();
   }, []);
 
   useEffect(() => {
     const getCities = async () => {
       const response = await axios.get(
-        `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${selectedUF}/distritos?orderBy=nome`
+        `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${administrativo.uf}/distritos?orderBy=nome`
       );
 
       const cities = response.data.map((city: any) => city.nome);
@@ -72,7 +126,7 @@ const NovoProcesso: React.FC = () => {
     };
 
     getCities();
-  }, [selectedUF]);
+  }, [administrativo.uf]);
 
   return (
     <ThemeProvider theme={Purple}>
@@ -90,13 +144,17 @@ const NovoProcesso: React.FC = () => {
               Novo Processo
             </Typography>
 
-            <form encType="multipart/formdata">
+            <form encType="multipart/formdata" onSubmit={handleSubmit}>
               <div className={classes.fieldsBox}>
                 <TextField
                   label="Número do Processo"
                   variant="outlined"
                   required
                   className={classes.field}
+                  value={processo.numProcesso}
+                  onChange={e =>
+                    setProcesso({ ...processo, numProcesso: e.target.value })
+                  }
                 />
 
                 <TextField
@@ -105,6 +163,10 @@ const NovoProcesso: React.FC = () => {
                   required
                   style={{ width: 320 }}
                   className={classes.field}
+                  value={processo.nomeParte}
+                  onChange={e =>
+                    setProcesso({ ...processo, nomeParte: e.target.value })
+                  }
                 />
 
                 <FormControl
@@ -114,10 +176,17 @@ const NovoProcesso: React.FC = () => {
                   className={classes.field}
                 >
                   <InputLabel id="assunto-select-label">Assunto</InputLabel>
-                  <Select labelId="assunto-select-label" label="Assunto">
-                    <MenuItem value={10}>Assunto 1</MenuItem>
-                    <MenuItem value={20}>Assunto 2</MenuItem>
-                    <MenuItem value={30}>Assunto 3</MenuItem>
+                  <Select
+                    labelId="assunto-select-label"
+                    label="Assunto"
+                    value={processo.assunto}
+                    onChange={handleSelectAssunto}
+                  >
+                    {assuntos.map(Assunto => (
+                      <MenuItem key={Assunto.id} value={String(Assunto.id)}>
+                        {Assunto.assunto}
+                      </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
 
@@ -145,19 +214,13 @@ const NovoProcesso: React.FC = () => {
 
               <div className={classes.tipoProcesso}>
                 <FormControl component="fieldset" required>
-                  <div
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                    }}
-                  >
+                  <div className={classes.tipoProcessoItems}>
                     <FormLabel component="legend">Tipo de Processo</FormLabel>
                     <RadioGroup
                       aria-label="gender"
                       name="gender1"
                       style={{ display: 'inline' }}
-                      value={tipoProcesso}
+                      value={processo.tipoProcesso}
                       onChange={handleChangeTipoProcesso}
                     >
                       <FormControlLabel
@@ -180,7 +243,7 @@ const NovoProcesso: React.FC = () => {
                 </FormControl>
               </div>
 
-              {tipoProcesso === 'administrativo' ? (
+              {processo.tipoProcesso === 'administrativo' ? (
                 <>
                   <div className={classes.fieldsBox}>
                     <TextField
@@ -189,6 +252,13 @@ const NovoProcesso: React.FC = () => {
                       style={{ width: 120 }}
                       required
                       className={classes.field}
+                      value={administrativo.matricula}
+                      onChange={e =>
+                        setAdministrativo({
+                          ...administrativo,
+                          matricula: e.target.value,
+                        })
+                      }
                     />
 
                     <TextField
@@ -197,6 +267,13 @@ const NovoProcesso: React.FC = () => {
                       style={{ width: 160 }}
                       required
                       className={classes.field}
+                      value={administrativo.cpf}
+                      onChange={e =>
+                        setAdministrativo({
+                          ...administrativo,
+                          cpf: e.target.value,
+                        })
+                      }
                     />
 
                     <TextField
@@ -205,6 +282,13 @@ const NovoProcesso: React.FC = () => {
                       style={{ width: 370 }}
                       required
                       className={classes.field}
+                      value={administrativo.endereco}
+                      onChange={e =>
+                        setAdministrativo({
+                          ...administrativo,
+                          endereco: e.target.value,
+                        })
+                      }
                     />
 
                     <TextField
@@ -213,6 +297,13 @@ const NovoProcesso: React.FC = () => {
                       style={{ width: 120 }}
                       required
                       className={classes.field}
+                      value={administrativo.numero}
+                      onChange={e =>
+                        setAdministrativo({
+                          ...administrativo,
+                          numero: e.target.value,
+                        })
+                      }
                     />
                   </div>
 
@@ -222,6 +313,13 @@ const NovoProcesso: React.FC = () => {
                       variant="outlined"
                       style={{ width: 320 }}
                       className={classes.field}
+                      value={administrativo.complemento}
+                      onChange={e =>
+                        setAdministrativo({
+                          ...administrativo,
+                          complemento: e.target.value,
+                        })
+                      }
                     />
 
                     <TextField
@@ -230,6 +328,13 @@ const NovoProcesso: React.FC = () => {
                       style={{ width: 200 }}
                       required
                       className={classes.field}
+                      value={administrativo.bairro}
+                      onChange={e =>
+                        setAdministrativo({
+                          ...administrativo,
+                          bairro: e.target.value,
+                        })
+                      }
                     />
 
                     <FormControl
@@ -242,12 +347,12 @@ const NovoProcesso: React.FC = () => {
                       <Select
                         labelId="uf-select-label"
                         label="UF"
-                        value={selectedUF}
+                        value={administrativo.uf}
                         onChange={handleSelectUF}
                       >
-                        {UFs.map(uf => (
-                          <MenuItem key={uf} value={uf}>
-                            {uf}
+                        {ufs.map(UF => (
+                          <MenuItem key={UF} value={UF}>
+                            {UF}
                           </MenuItem>
                         ))}
                       </Select>
@@ -263,13 +368,13 @@ const NovoProcesso: React.FC = () => {
                       <Select
                         labelId="cidade-select-label"
                         label="Cidade"
-                        value={selectedCity}
+                        value={administrativo.cidade}
                         onChange={handleSelectCity}
                       >
-                        {selectedUF !== '' ? (
-                          cidades.map(cidade => (
-                            <MenuItem key={cidade} value={cidade}>
-                              {cidade}
+                        {administrativo.uf !== '' ? (
+                          cidades.map(Cidade => (
+                            <MenuItem key={Cidade} value={Cidade}>
+                              {Cidade}
                             </MenuItem>
                           ))
                         ) : (
@@ -286,6 +391,13 @@ const NovoProcesso: React.FC = () => {
                       style={{ width: 200 }}
                       required
                       className={classes.field}
+                      value={administrativo.telefone}
+                      onChange={e =>
+                        setAdministrativo({
+                          ...administrativo,
+                          telefone: e.target.value,
+                        })
+                      }
                     />
 
                     <TextField
@@ -293,6 +405,13 @@ const NovoProcesso: React.FC = () => {
                       variant="outlined"
                       style={{ width: 600 }}
                       className={classes.field}
+                      value={administrativo.observacoes}
+                      onChange={e =>
+                        setAdministrativo({
+                          ...administrativo,
+                          observacoes: e.target.value,
+                        })
+                      }
                     />
                   </div>
                 </>
@@ -302,6 +421,7 @@ const NovoProcesso: React.FC = () => {
 
               <div className={classes.subButtonBox}>
                 <Button
+                  type="submit"
                   variant="contained"
                   color="primary"
                   className={classes.subButton}

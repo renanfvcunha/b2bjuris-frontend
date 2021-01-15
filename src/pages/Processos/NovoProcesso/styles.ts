@@ -41,6 +41,11 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'center',
     marginTop: theme.spacing(3),
   },
+  tipoProcessoItems: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
   subButtonBox: {
     marginTop: 48,
     display: 'flex',
