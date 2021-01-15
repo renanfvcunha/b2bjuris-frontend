@@ -25,10 +25,10 @@ const useStyles = makeStyles(theme => ({
     maxWidth: 1140,
     height: 640,
   },
-  addUserBtn: {
+  addProccessBtn: {
     position: 'absolute',
     top: 12,
-    left: 200,
+    left: 250,
   },
 }));
 

@@ -7,6 +7,7 @@ import React, {
   useCallback,
   useContext,
 } from 'react';
+import { useHistory } from 'react-router-dom';
 import MaterialTable, { Icons, MTableToolbar } from 'material-table';
 import { Fab, ThemeProvider, Tooltip } from '@material-ui/core';
 import {
@@ -39,6 +40,7 @@ const Processos: React.FC = () => {
   const classes = useStyles();
   const tableRef: RefObject<any> = createRef();
   const { handleSetPageTitle } = useContext(PageTitleContext);
+  const history = useHistory();
 
   const [newUserOpen, setNewUserOpen] = useState(false);
   const [modalAlert, setModalAlert] = useState(false);
@@ -149,7 +151,7 @@ const Processos: React.FC = () => {
         <div className={classes.table}>
           <ThemeProvider theme={theme}>
             <MaterialTable
-              title="Lista de Processos"
+              title="Processos Cadastrados"
               tableRef={tableRef}
               columns={[
                 {
@@ -177,7 +179,13 @@ const Processos: React.FC = () => {
                   align: 'left',
                 },
                 {
-                  title: 'Criado Em',
+                  title: 'Status',
+                  field: 'status',
+                  type: 'string',
+                  align: 'left',
+                },
+                {
+                  title: 'Adicionado Em',
                   field: 'created_at',
                   type: 'datetime',
                   align: 'left',
@@ -188,10 +196,10 @@ const Processos: React.FC = () => {
                   <div>
                     <MTableToolbar {...props} />
                     <Tooltip
-                      title="Adicionar Processo"
-                      aria-label="addUser"
-                      className={classes.addUserBtn}
-                      onClick={() => setNewUserOpen(true)}
+                      title="Novo Processo"
+                      aria-label="addProccess"
+                      className={classes.addProccessBtn}
+                      onClick={() => history.push('/processos/novo')}
                     >
                       <Fab color="primary" size="small">
                         <Add />
