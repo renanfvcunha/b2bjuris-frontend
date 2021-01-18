@@ -31,6 +31,7 @@ import useStyles, { Purple, Red } from './styles';
 import { ProcessoContext } from '../../../contexts/processoContext';
 import api from '../../../services/api';
 import Administrativo from './Administrativo';
+import Judicial from './Judicial';
 
 const NovoProcesso: React.FC = () => {
   const classes = useStyles();
@@ -65,10 +66,16 @@ const NovoProcesso: React.FC = () => {
     telefone: '',
     observacoes: '',
   });
+  const [judicial, setJudicial] = useState({
+    tipoAcao: '',
+    poloPassivo: '',
+    valorCausa: '',
+  });
 
   const [assuntos, setAssuntos] = useState([
     {
       id: 0,
+      tipo: '',
       assunto: '',
     },
   ]);
@@ -129,7 +136,7 @@ const NovoProcesso: React.FC = () => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    cadastrarProcesso(processo, administrativo, arquivos);
+    cadastrarProcesso(processo, administrativo, judicial, arquivos);
   };
 
   useEffect(() => {
@@ -214,11 +221,21 @@ const NovoProcesso: React.FC = () => {
                     value={processo.assunto}
                     onChange={handleSelectAssunto}
                   >
-                    {assuntos.map(Assunto => (
-                      <MenuItem key={Assunto.id} value={String(Assunto.id)}>
-                        {Assunto.assunto}
+                    {processo.tipoProcesso !== '' ? (
+                      assuntos.map(Assunto =>
+                        Assunto.tipo === processo.tipoProcesso ? (
+                          <MenuItem key={Assunto.id} value={String(Assunto.id)}>
+                            {Assunto.assunto}
+                          </MenuItem>
+                        ) : (
+                          ''
+                        )
+                      )
+                    ) : (
+                      <MenuItem value="">
+                        Selecione um tipo de processo
                       </MenuItem>
-                    ))}
+                    )}
                   </Select>
                 </FormControl>
 
@@ -313,6 +330,12 @@ const NovoProcesso: React.FC = () => {
                   administrativo={administrativo}
                   setAdministrativo={setAdministrativo}
                 />
+              ) : (
+                <div />
+              )}
+
+              {processo.tipoProcesso === 'judicial' ? (
+                <Judicial judicial={judicial} setJudicial={setJudicial} />
               ) : (
                 <div />
               )}

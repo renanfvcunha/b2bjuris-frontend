@@ -23,12 +23,18 @@ interface IProcesso {
     telefone: string;
     observacoes: string;
   };
+  judicial: {
+    tipoAcao: string;
+    poloPassivo: string;
+    valorCausa: string;
+  };
 }
 
 interface ProcessoContextData {
   cadastrarProcesso(
     processo: IProcesso['processo'],
     administrativo: IProcesso['administrativo'],
+    judicial: IProcesso['judicial'],
     arquivos: File[]
   ): Promise<void>;
   success: boolean;
@@ -49,6 +55,7 @@ const ProcessoProvider: React.FC = ({ children }) => {
   const cadastrarProcesso = async (
     processo: IProcesso['processo'],
     administrativo: IProcesso['administrativo'],
+    judicial: IProcesso['judicial'],
     arquivos: File[]
   ) => {
     const formProcess = new FormData();
@@ -68,6 +75,10 @@ const ProcessoProvider: React.FC = ({ children }) => {
       formProcess.append('uf', administrativo.uf);
       formProcess.append('telefone', administrativo.telefone);
       formProcess.append('observacoes', administrativo.observacoes);
+    } else if (processo.tipoProcesso === 'judicial') {
+      formProcess.append('tipo_acao', judicial.tipoAcao);
+      formProcess.append('polo_passivo', judicial.poloPassivo);
+      formProcess.append('valor_causa', judicial.valorCausa);
     }
 
     if (arquivos !== []) {
