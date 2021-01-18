@@ -42,7 +42,6 @@ const Processos: React.FC = () => {
   const { handleSetPageTitle } = useContext(PageTitleContext);
   const history = useHistory();
 
-  const [newUserOpen, setNewUserOpen] = useState(false);
   const [modalAlert, setModalAlert] = useState(false);
   const [modalAlertData, setModalAlertData] = useState<ModalAlertData>({
     title: '',
@@ -58,14 +57,6 @@ const Processos: React.FC = () => {
       tableRef.current.onQueryChange();
     }
   }, [success, tableRef]);
-
-  const setSuccessTrue = () => {
-    setSuccess(true);
-  };
-
-  const handleCloseNewUser = () => {
-    setNewUserOpen(false);
-  };
 
   const handleCloseModal = () => {
     if (modalAlert) {

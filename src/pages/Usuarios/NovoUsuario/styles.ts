@@ -16,10 +16,10 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'center',
     },
     paper: {
-      backgroundColor: theme.palette.background.paper,
       border: `2px solid ${purple['100']}`,
       boxShadow: theme.shadows[5],
       padding: theme.spacing(1, 2, 1),
+      backgroundColor: defaultStyles.defaultBoxBackground,
     },
     backBtn: {
       position: 'absolute',
@@ -32,7 +32,6 @@ const useStyles = makeStyles((theme: Theme) =>
       width: 800,
     },
     formBox: {
-      backgroundColor: '#fff',
       borderRadius: 12,
       width: '100%',
     },

@@ -2,10 +2,13 @@ import React, {
   ChangeEvent,
   useState,
   useEffect,
+  useCallback,
   createRef,
   RefObject,
   FormEvent,
+  useContext,
 } from 'react';
+import { useHistory } from 'react-router-dom';
 import {
   TextField,
   Typography,
@@ -20,23 +23,36 @@ import {
   Radio,
   Button,
   Tooltip,
+  Fab,
 } from '@material-ui/core';
+import { ArrowBack, RemoveCircle } from '@material-ui/icons';
 import axios from 'axios';
 
-import useStyles, { Purple } from './styles';
+import useStyles, { Purple, Red } from './styles';
+import { ProcessoContext } from '../../../contexts/processoContext';
 import api from '../../../services/api';
 
 const NovoProcesso: React.FC = () => {
   const classes = useStyles();
   const inputFileRef: RefObject<HTMLInputElement> = createRef();
+  const history = useHistory();
+  const { cadastrarProcesso, success, setSuccessFalse } = useContext(
+    ProcessoContext
+  );
 
+  const [arquivos, setArquivos] = useState<File[]>([]);
+  const [arquivosUrl, setArquivosUrl] = useState([
+    {
+      name: '',
+      url: '',
+    },
+  ]);
   const [processo, setProcesso] = useState({
     numProcesso: '',
     nomeParte: '',
     assunto: '',
     tipoProcesso: '',
   });
-
   const [administrativo, setAdministrativo] = useState({
     matricula: '',
     cpf: '',
@@ -66,6 +82,12 @@ const NovoProcesso: React.FC = () => {
     });
   };
 
+  const goBack = useCallback(() => {
+    if (success) {
+      history.push('/processos');
+    }
+  }, [success, history]);
+
   const handleSelectUF = (e: ChangeEvent<{ value: unknown }>) => {
     setAdministrativo({ ...administrativo, uf: e.target.value as string });
   };
@@ -81,16 +103,43 @@ const NovoProcesso: React.FC = () => {
     });
   };
 
+  const pickFiles = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const { files } = e.target;
+      const newFiles: File[] = [];
+      const newFilesUrl: { name: string; url: string }[] = [];
+      for (let i = 0; i < files.length; i += 1) {
+        newFiles.push(files[i]);
+        newFilesUrl.push({
+          name: files[i].name,
+          url: URL.createObjectURL(files[i]),
+        });
+      }
+
+      const addFiles = [...arquivos];
+      addFiles.push(...newFiles);
+      setArquivos(addFiles);
+
+      const addFilesUrl = [...arquivosUrl];
+      addFilesUrl.push(...newFilesUrl);
+      setArquivosUrl(addFilesUrl);
+    }
+  };
+
+  const removeFiles = (i: number) => {
+    const removedFile = [...arquivos];
+    removedFile.splice(i - 1, 1);
+    setArquivos(removedFile);
+
+    const removedFileUrl = [...arquivosUrl];
+    removedFileUrl.splice(i, 1);
+    setArquivosUrl(removedFileUrl);
+  };
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    let sendProcesso = {};
-
-    if (processo.tipoProcesso === 'administrativo') {
-      sendProcesso = Object.assign(processo, administrativo);
-    }
-
-    console.log(sendProcesso);
+    cadastrarProcesso(processo, administrativo, arquivos);
   };
 
   useEffect(() => {
@@ -128,6 +177,14 @@ const NovoProcesso: React.FC = () => {
     getCities();
   }, [administrativo.uf]);
 
+  useEffect(() => {
+    goBack();
+
+    if (success) {
+      setSuccessFalse();
+    }
+  }, [goBack, success, setSuccessFalse]);
+
   return (
     <ThemeProvider theme={Purple}>
       <main className={classes.content}>
@@ -135,6 +192,16 @@ const NovoProcesso: React.FC = () => {
 
         <div className={classes.contentArea}>
           <div className={classes.addProcessBox}>
+            <Tooltip
+              title="Voltar"
+              aria-label="back"
+              className={classes.backBtn}
+              onClick={() => history.goBack()}
+            >
+              <Fab color="primary" size="small">
+                <ArrowBack />
+              </Fab>
+            </Tooltip>
             <Typography
               align="center"
               component="h1"
@@ -209,8 +276,41 @@ const NovoProcesso: React.FC = () => {
                   application/vnd.openxmlformats-officedocument.wordprocessingml.template,
                   application/vnd.ms-word.document.macroEnabled.12,
                   application/vnd.ms-word.template.macroEnabled.12"
+                  onChange={pickFiles}
                 />
               </div>
+
+              {arquivos.length !== 0 ? (
+                <div className={classes.attachments}>
+                  <span>Anexos:&nbsp;</span>
+                  {arquivosUrl.map((arquivo, i) => (
+                    <div key={arquivo.name}>
+                      <a href={arquivo.url}>{arquivo.name}</a>
+                      {i !== 0 ? (
+                        <ThemeProvider theme={Red}>
+                          <Tooltip
+                            title="Remover Arquivo"
+                            aria-label="removeFile"
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => removeFiles(i)}
+                          >
+                            <RemoveCircle fontSize="small" color="primary" />
+                          </Tooltip>
+                        </ThemeProvider>
+                      ) : (
+                        ''
+                      )}
+                      {i !== 0 && i !== arquivos.length ? (
+                        <span>,&nbsp;</span>
+                      ) : (
+                        ''
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                ''
+              )}
 
               <div className={classes.tipoProcesso}>
                 <FormControl component="fieldset" required>
@@ -263,6 +363,7 @@ const NovoProcesso: React.FC = () => {
 
                     <TextField
                       label="CPF"
+                      placeholder="xxx.xxx.xxx-xx"
                       variant="outlined"
                       style={{ width: 160 }}
                       required
@@ -387,6 +488,7 @@ const NovoProcesso: React.FC = () => {
                   <div className={classes.fieldsBox}>
                     <TextField
                       label="Telefone"
+                      placeholder="(xx) xxxx-xxxx"
                       variant="outlined"
                       style={{ width: 200 }}
                       required

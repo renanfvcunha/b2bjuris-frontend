@@ -1,4 +1,5 @@
 import { createMuiTheme, makeStyles } from '@material-ui/core';
+import { red } from '@material-ui/core/colors';
 
 import defaultStyles from '../../../utils/defaultStyles';
 
@@ -19,9 +20,14 @@ const useStyles = makeStyles(theme => ({
   },
   addProcessBox: {
     width: '100%',
-    backgroundColor: '#fff',
+    backgroundColor: defaultStyles.defaultBoxBackground,
     maxWidth: 1140,
     height: 640,
+  },
+  backBtn: {
+    position: 'absolute',
+    marginLeft: 12,
+    marginTop: 12,
   },
   addProcessTitle: {
     marginTop: 12,
@@ -32,6 +38,12 @@ const useStyles = makeStyles(theme => ({
     marginTop: 16,
     display: 'flex',
     justifyContent: 'center',
+  },
+  attachments: {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    margin: '16px 150px 0 150px',
+    flexWrap: 'wrap',
   },
   field: {
     margin: theme.spacing(1),
@@ -64,6 +76,14 @@ export const Purple = createMuiTheme({
     },
     secondary: {
       main: defaultStyles.purpleDark,
+    },
+  },
+});
+
+export const Red = createMuiTheme({
+  palette: {
+    primary: {
+      main: red['500'],
     },
   },
 });
