@@ -228,7 +228,7 @@ const NovoProcesso: React.FC = () => {
                             {Assunto.assunto}
                           </MenuItem>
                         ) : (
-                          ''
+                          <div />
                         )
                       )
                     ) : (
