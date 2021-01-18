@@ -28,13 +28,7 @@ import { toast } from 'react-toastify';
 import useStyles, { theme } from './styles';
 import api from '../../services/api';
 import { PageTitleContext } from '../../contexts/pageTitleContext';
-import ModalAlert from '../../components/ModalAlert';
 import ModalConfirmation from '../../components/ModalConfirmation';
-
-interface ModalAlertData {
-  title: string;
-  msg: string;
-}
 
 const Processos: React.FC = () => {
   const classes = useStyles();
@@ -42,11 +36,6 @@ const Processos: React.FC = () => {
   const { handleSetPageTitle } = useContext(PageTitleContext);
   const history = useHistory();
 
-  const [modalAlert, setModalAlert] = useState(false);
-  const [modalAlertData, setModalAlertData] = useState<ModalAlertData>({
-    title: '',
-    msg: '',
-  });
   const [modalConfirmation, setModalConfirmation] = useState(false);
   const [name, setName] = useState('');
   const [userToRemove, setUserToRemove] = useState(0);
@@ -59,11 +48,7 @@ const Processos: React.FC = () => {
   }, [success, tableRef]);
 
   const handleCloseModal = () => {
-    if (modalAlert) {
-      setModalAlert(false);
-    } else if (modalConfirmation) {
-      setModalConfirmation(false);
-    }
+    setModalConfirmation(false);
   };
 
   const handleRemoveUser = async () => {
@@ -101,11 +86,7 @@ const Processos: React.FC = () => {
   };
 
   const dataRequestFailure = (errorMsg: string) => {
-    setModalAlertData({
-      title: 'Erro',
-      msg: errorMsg,
-    });
-    setModalAlert(true);
+    toast.error(errorMsg);
   };
 
   const tableIcons: Icons = {
@@ -290,12 +271,6 @@ const Processos: React.FC = () => {
           </ThemeProvider>
         </div>
       </div>
-      <ModalAlert
-        open={modalAlert}
-        close={handleCloseModal}
-        title={modalAlertData.title}
-        msg={modalAlertData.msg}
-      />
       <ModalConfirmation
         open={modalConfirmation}
         close={handleCloseModal}

@@ -28,13 +28,7 @@ import useStyles, { theme } from './styles';
 import api from '../../services/api';
 import { PageTitleContext } from '../../contexts/pageTitleContext';
 import NovoUsuario from './NovoUsuario';
-import ModalAlert from '../../components/ModalAlert';
 import ModalConfirmation from '../../components/ModalConfirmation';
-
-interface ModalAlertData {
-  title: string;
-  msg: string;
-}
 
 const Usuarios: React.FC = () => {
   const classes = useStyles();
@@ -43,10 +37,6 @@ const Usuarios: React.FC = () => {
 
   const [newUserOpen, setNewUserOpen] = useState(false);
   const [modalAlert, setModalAlert] = useState(false);
-  const [modalAlertData, setModalAlertData] = useState<ModalAlertData>({
-    title: '',
-    msg: '',
-  });
   const [modalConfirmation, setModalConfirmation] = useState(false);
   const [name, setName] = useState('');
   const [userToRemove, setUserToRemove] = useState(0);
@@ -82,38 +72,24 @@ const Usuarios: React.FC = () => {
 
       setSuccess(true);
 
-      toast.success(response.data.msg, {
-        position: 'top-center',
-      });
+      toast.success(response.data.msg);
     } catch (err) {
       if (err.message === 'Network Error') {
         toast.error(
-          'Não foi possível conectar ao servidor. Tente novamente ou contate o suporte.',
-          {
-            position: 'top-center',
-          }
+          'Não foi possível conectar ao servidor. Tente novamente ou contate o suporte.'
         );
       } else if (err.response) {
-        toast.error(err.response.data.msg, {
-          position: 'top-center',
-        });
+        toast.error(err.response.data.msg);
       } else {
         toast.error(
-          'Erro ao remover usuário. Tente novamente ou contate o suporte.',
-          {
-            position: 'top-center',
-          }
+          'Erro ao remover usuário. Tente novamente ou contate o suporte.'
         );
       }
     }
   };
 
   const dataRequestFailure = (errorMsg: string) => {
-    setModalAlertData({
-      title: 'Erro',
-      msg: errorMsg,
-    });
-    setModalAlert(true);
+    toast.error(errorMsg);
   };
 
   const tableIcons: Icons = {
@@ -296,12 +272,6 @@ const Usuarios: React.FC = () => {
         open={newUserOpen}
         close={handleCloseNewUser}
         setSuccess={setSuccessTrue}
-      />
-      <ModalAlert
-        open={modalAlert}
-        close={handleCloseModal}
-        title={modalAlertData.title}
-        msg={modalAlertData.msg}
       />
       <ModalConfirmation
         open={modalConfirmation}

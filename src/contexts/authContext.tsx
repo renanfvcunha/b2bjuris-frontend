@@ -1,4 +1,5 @@
 import React, { useState, useEffect, createContext } from 'react';
+import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 
 import api from '../services/api';
@@ -6,9 +7,6 @@ import api from '../services/api';
 interface AuthContextData {
   signed: boolean;
   loading: boolean;
-  error: boolean;
-  setErrorFalse(): void;
-  modalMsg: string;
   usuario: {
     id: number;
     nome: string;
@@ -27,12 +25,6 @@ const AuthProvider: React.FC = ({ children }) => {
     null
   );
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [modalMsg, setModalMsg] = useState('');
-
-  const setErrorFalse = () => {
-    setError(false);
-  };
 
   const signIn = async (nome_usuario: string, senha: string) => {
     setLoading(true);
@@ -53,16 +45,17 @@ const AuthProvider: React.FC = ({ children }) => {
       localStorage.setItem('@Auth:token', response.data.token);
     } catch (err) {
       if (err.message === 'Network Error') {
-        setModalMsg(
+        toast.error(
           'Não foi possível conectar ao servidor. Tente novamente ou contate o suporte.'
         );
       } else if (err.response) {
-        setModalMsg(err.response.data.msg);
+        toast.error(err.response.data.msg);
       } else {
-        setModalMsg(err);
+        toast.error(
+          'Erro desconhecido ao fazer login. Tente novamente ou contate o suporte.'
+        );
       }
 
-      setError(true);
       setUsuario(null);
     }
 
@@ -95,9 +88,6 @@ const AuthProvider: React.FC = ({ children }) => {
       value={{
         signed: !!usuario,
         loading,
-        error,
-        setErrorFalse,
-        modalMsg,
         usuario,
         signIn,
         signOut,

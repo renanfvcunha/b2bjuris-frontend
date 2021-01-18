@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, FormEvent } from 'react';
+import React, { useState, useContext, FormEvent } from 'react';
 import {
   Button,
   CircularProgress,
@@ -9,35 +9,19 @@ import {
 
 import useStyles from './styles';
 import { AuthContext } from '../../contexts/authContext';
-import ModalAlert from '../../components/ModalAlert';
 
 const Login: React.FC = () => {
   const classes = useStyles();
-  const { loading, error, setErrorFalse, modalMsg, signIn } = useContext(
-    AuthContext
-  );
+  const { loading, signIn } = useContext(AuthContext);
 
   const [nomeUsuario, setNomeUsuario] = useState('');
   const [senha, setSenha] = useState('');
-  const [modalOpen, setModalOpen] = useState(false);
-
-  const handleModalClose = () => {
-    setModalOpen(false);
-  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     signIn(nomeUsuario, senha);
   };
-
-  useEffect(() => {
-    if (error) {
-      setModalOpen(true);
-
-      setErrorFalse();
-    }
-  }, [error, setErrorFalse]);
 
   return (
     <main className={classes.content}>
@@ -98,12 +82,6 @@ const Login: React.FC = () => {
           </form>
         </div>
       </Container>
-      <ModalAlert
-        open={modalOpen}
-        close={handleModalClose}
-        title="Erro"
-        msg={modalMsg}
-      />
     </main>
   );
 };
