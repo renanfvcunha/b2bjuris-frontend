@@ -22,6 +22,7 @@ import {
   Edit,
   Delete,
   Refresh,
+  Visibility,
 } from '@material-ui/icons';
 import { toast } from 'react-toastify';
 
@@ -133,7 +134,7 @@ const Processos: React.FC = () => {
                   align: 'left',
                 },
                 {
-                  title: 'Número do Processo',
+                  title: 'Nº do Processo',
                   field: 'numero_processo',
                   type: 'numeric',
                   align: 'left',
@@ -214,6 +215,12 @@ const Processos: React.FC = () => {
                 })
               }
               actions={[
+                {
+                  icon: () => <Visibility color="secondary" />,
+                  tooltip: 'Visualizar Processo',
+                  onClick: (event, rowData: any) =>
+                    history.push(`/processos/${rowData.id}`),
+                },
                 {
                   icon: () => <Edit color="secondary" />,
                   tooltip: 'Editar Processo',
