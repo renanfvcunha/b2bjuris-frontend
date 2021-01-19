@@ -32,6 +32,7 @@ import { ProcessoContext } from '../../../contexts/processoContext';
 import api from '../../../services/api';
 import Administrativo from './Administrativo';
 import Judicial from './Judicial';
+import Oficio from './Oficio';
 
 const NovoProcesso: React.FC = () => {
   const classes = useStyles();
@@ -70,6 +71,10 @@ const NovoProcesso: React.FC = () => {
     tipoAcao: '',
     poloPassivo: '',
     valorCausa: '',
+  });
+  const [oficio, setOficio] = useState({
+    referencia: '',
+    secretaria: '',
   });
 
   const [assuntos, setAssuntos] = useState([
@@ -136,7 +141,7 @@ const NovoProcesso: React.FC = () => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    cadastrarProcesso(processo, administrativo, judicial, arquivos);
+    cadastrarProcesso(processo, administrativo, judicial, oficio, arquivos);
   };
 
   useEffect(() => {
@@ -228,7 +233,7 @@ const NovoProcesso: React.FC = () => {
                             {Assunto.assunto}
                           </MenuItem>
                         ) : (
-                          <div />
+                          <div key={Assunto.id} />
                         )
                       )
                     ) : (
@@ -336,6 +341,12 @@ const NovoProcesso: React.FC = () => {
 
               {processo.tipoProcesso === 'judicial' ? (
                 <Judicial judicial={judicial} setJudicial={setJudicial} />
+              ) : (
+                <div />
+              )}
+
+              {processo.tipoProcesso === 'oficio' ? (
+                <Oficio oficio={oficio} setOficio={setOficio} />
               ) : (
                 <div />
               )}

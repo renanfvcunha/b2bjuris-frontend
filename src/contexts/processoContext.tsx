@@ -28,6 +28,10 @@ interface IProcesso {
     poloPassivo: string;
     valorCausa: string;
   };
+  oficio: {
+    referencia: string;
+    secretaria: string;
+  };
 }
 
 interface ProcessoContextData {
@@ -35,6 +39,7 @@ interface ProcessoContextData {
     processo: IProcesso['processo'],
     administrativo: IProcesso['administrativo'],
     judicial: IProcesso['judicial'],
+    oficio: IProcesso['oficio'],
     arquivos: File[]
   ): Promise<void>;
   success: boolean;
@@ -56,6 +61,7 @@ const ProcessoProvider: React.FC = ({ children }) => {
     processo: IProcesso['processo'],
     administrativo: IProcesso['administrativo'],
     judicial: IProcesso['judicial'],
+    oficio: IProcesso['oficio'],
     arquivos: File[]
   ) => {
     const formProcess = new FormData();
@@ -79,6 +85,9 @@ const ProcessoProvider: React.FC = ({ children }) => {
       formProcess.append('tipo_acao', judicial.tipoAcao);
       formProcess.append('polo_passivo', judicial.poloPassivo);
       formProcess.append('valor_causa', judicial.valorCausa);
+    } else if (processo.tipoProcesso === 'oficio') {
+      formProcess.append('processo_ref', oficio.referencia);
+      formProcess.append('secretaria', oficio.secretaria);
     }
 
     if (arquivos !== []) {
