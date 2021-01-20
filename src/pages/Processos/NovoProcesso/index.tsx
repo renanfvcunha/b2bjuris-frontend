@@ -28,6 +28,7 @@ import {
 import { ArrowBack, RemoveCircle } from '@material-ui/icons';
 
 import useStyles, { Purple, Red } from './styles';
+import DefaultBox from '../../../components/DefaultBox';
 import { ProcessoContext } from '../../../contexts/processoContext';
 import api from '../../../services/api';
 import Administrativo from './Administrativo';
@@ -167,203 +168,199 @@ const NovoProcesso: React.FC = () => {
       <main className={classes.content}>
         <div className={classes.toolbar} />
 
-        <div className={classes.contentArea}>
-          <div className={classes.addProcessBox}>
-            <Tooltip
-              title="Voltar"
-              aria-label="back"
-              className={classes.backBtn}
-              onClick={() => history.goBack()}
-            >
-              <Fab color="primary" size="small">
-                <ArrowBack />
-              </Fab>
-            </Tooltip>
-            <Typography
-              align="center"
-              component="h1"
-              variant="h4"
-              className={classes.addProcessTitle}
-            >
-              Novo Processo
-            </Typography>
+        <DefaultBox>
+          <Tooltip
+            title="Voltar"
+            aria-label="back"
+            className={classes.backBtn}
+            onClick={() => history.goBack()}
+          >
+            <Fab color="primary" size="small">
+              <ArrowBack />
+            </Fab>
+          </Tooltip>
+          <Typography
+            align="center"
+            component="h1"
+            variant="h4"
+            className={classes.addProcessTitle}
+          >
+            Novo Processo
+          </Typography>
 
-            <form encType="multipart/formdata" onSubmit={handleSubmit}>
-              <div className={classes.fieldsBox}>
-                <TextField
-                  label="Número do Processo"
-                  variant="outlined"
-                  required
-                  className={classes.field}
-                  value={processo.numProcesso}
-                  onChange={e =>
-                    setProcesso({ ...processo, numProcesso: e.target.value })
-                  }
-                />
+          <form encType="multipart/formdata" onSubmit={handleSubmit}>
+            <div className={classes.fieldsBox}>
+              <TextField
+                label="Número do Processo"
+                variant="outlined"
+                required
+                className={classes.field}
+                value={processo.numProcesso}
+                onChange={e =>
+                  setProcesso({ ...processo, numProcesso: e.target.value })
+                }
+              />
 
-                <TextField
-                  label="Nome da Parte"
-                  variant="outlined"
-                  required
-                  style={{ width: 320 }}
-                  className={classes.field}
-                  value={processo.nomeParte}
-                  onChange={e =>
-                    setProcesso({ ...processo, nomeParte: e.target.value })
-                  }
-                />
+              <TextField
+                label="Nome da Parte"
+                variant="outlined"
+                required
+                style={{ width: 320 }}
+                className={classes.field}
+                value={processo.nomeParte}
+                onChange={e =>
+                  setProcesso({ ...processo, nomeParte: e.target.value })
+                }
+              />
 
-                <FormControl
-                  variant="outlined"
-                  required
-                  style={{ minWidth: 150 }}
-                  className={classes.field}
+              <FormControl
+                variant="outlined"
+                required
+                style={{ minWidth: 150 }}
+                className={classes.field}
+              >
+                <InputLabel id="assunto-select-label">Assunto</InputLabel>
+                <Select
+                  labelId="assunto-select-label"
+                  label="Assunto"
+                  value={processo.assunto}
+                  onChange={handleSelectAssunto}
                 >
-                  <InputLabel id="assunto-select-label">Assunto</InputLabel>
-                  <Select
-                    labelId="assunto-select-label"
-                    label="Assunto"
-                    value={processo.assunto}
-                    onChange={handleSelectAssunto}
-                  >
-                    {processo.tipoProcesso !== '' ? (
-                      assuntos.map(Assunto =>
-                        Assunto.tipo === processo.tipoProcesso ? (
-                          <MenuItem key={Assunto.id} value={String(Assunto.id)}>
-                            {Assunto.assunto}
-                          </MenuItem>
-                        ) : (
-                          <div key={Assunto.id} />
-                        )
+                  {processo.tipoProcesso !== '' ? (
+                    assuntos.map(Assunto =>
+                      Assunto.tipo === processo.tipoProcesso ? (
+                        <MenuItem key={Assunto.id} value={String(Assunto.id)}>
+                          {Assunto.assunto}
+                        </MenuItem>
+                      ) : (
+                        <div key={Assunto.id} />
                       )
-                    ) : (
-                      <MenuItem value="">
-                        Selecione um tipo de processo
-                      </MenuItem>
-                    )}
-                  </Select>
-                </FormControl>
+                    )
+                  ) : (
+                    <MenuItem value="">Selecione um tipo de processo</MenuItem>
+                  )}
+                </Select>
+              </FormControl>
 
-                <Tooltip title="Somente arquivos PDF e Word">
-                  <Button
-                    variant="outlined"
-                    className={classes.field}
-                    onClick={() => inputFileRef.current?.click()}
-                  >
-                    Anexos
-                  </Button>
-                </Tooltip>
-                <input
-                  ref={inputFileRef}
-                  hidden
-                  multiple
-                  type="file"
-                  accept="application/pdf, application/msword,
+              <Tooltip title="Somente arquivos PDF e Word">
+                <Button
+                  variant="outlined"
+                  className={classes.field}
+                  onClick={() => inputFileRef.current?.click()}
+                >
+                  Anexos
+                </Button>
+              </Tooltip>
+              <input
+                ref={inputFileRef}
+                hidden
+                multiple
+                type="file"
+                accept="application/pdf, application/msword,
                   application/vnd.openxmlformats-officedocument.wordprocessingml.document,
                   application/vnd.openxmlformats-officedocument.wordprocessingml.template,
                   application/vnd.ms-word.document.macroEnabled.12,
                   application/vnd.ms-word.template.macroEnabled.12"
-                  onChange={pickFiles}
-                />
-              </div>
+                onChange={pickFiles}
+              />
+            </div>
 
-              {arquivos.length !== 0 ? (
-                <div className={classes.attachments}>
-                  <span>Anexos:&nbsp;</span>
-                  {arquivosUrl.map((arquivo, i) => (
-                    <div key={arquivo.name}>
-                      <a href={arquivo.url}>{arquivo.name}</a>
-                      {i !== 0 ? (
-                        <ThemeProvider theme={Red}>
-                          <Tooltip
-                            title="Remover Arquivo"
-                            aria-label="removeFile"
-                            style={{ cursor: 'pointer' }}
-                            onClick={() => removeFiles(i)}
-                          >
-                            <RemoveCircle fontSize="small" color="primary" />
-                          </Tooltip>
-                        </ThemeProvider>
-                      ) : (
-                        ''
-                      )}
-                      {i !== 0 && i !== arquivos.length ? (
-                        <span>,&nbsp;</span>
-                      ) : (
-                        ''
-                      )}
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                ''
-              )}
-
-              <div className={classes.tipoProcesso}>
-                <FormControl component="fieldset" required>
-                  <div className={classes.tipoProcessoItems}>
-                    <FormLabel component="legend">Tipo de Processo</FormLabel>
-                    <RadioGroup
-                      aria-label="gender"
-                      name="gender1"
-                      style={{ display: 'inline' }}
-                      value={processo.tipoProcesso}
-                      onChange={handleChangeTipoProcesso}
-                    >
-                      <FormControlLabel
-                        value="administrativo"
-                        control={<Radio />}
-                        label="Administrativo"
-                      />
-                      <FormControlLabel
-                        value="judicial"
-                        control={<Radio />}
-                        label="Judicial"
-                      />
-                      <FormControlLabel
-                        value="oficio"
-                        control={<Radio />}
-                        label="Ofício"
-                      />
-                    </RadioGroup>
+            {arquivos.length !== 0 ? (
+              <div className={classes.attachments}>
+                <span>Anexos:&nbsp;</span>
+                {arquivosUrl.map((arquivo, i) => (
+                  <div key={arquivo.name}>
+                    <a href={arquivo.url}>{arquivo.name}</a>
+                    {i !== 0 ? (
+                      <ThemeProvider theme={Red}>
+                        <Tooltip
+                          title="Remover Arquivo"
+                          aria-label="removeFile"
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => removeFiles(i)}
+                        >
+                          <RemoveCircle fontSize="small" color="primary" />
+                        </Tooltip>
+                      </ThemeProvider>
+                    ) : (
+                      ''
+                    )}
+                    {i !== 0 && i !== arquivos.length ? (
+                      <span>,&nbsp;</span>
+                    ) : (
+                      ''
+                    )}
                   </div>
-                </FormControl>
+                ))}
               </div>
+            ) : (
+              ''
+            )}
 
-              {processo.tipoProcesso === 'administrativo' ? (
-                <Administrativo
-                  administrativo={administrativo}
-                  setAdministrativo={setAdministrativo}
-                />
-              ) : (
-                <div />
-              )}
+            <div className={classes.tipoProcesso}>
+              <FormControl component="fieldset" required>
+                <div className={classes.tipoProcessoItems}>
+                  <FormLabel component="legend">Tipo de Processo</FormLabel>
+                  <RadioGroup
+                    aria-label="gender"
+                    name="gender1"
+                    style={{ display: 'inline' }}
+                    value={processo.tipoProcesso}
+                    onChange={handleChangeTipoProcesso}
+                  >
+                    <FormControlLabel
+                      value="administrativo"
+                      control={<Radio />}
+                      label="Administrativo"
+                    />
+                    <FormControlLabel
+                      value="judicial"
+                      control={<Radio />}
+                      label="Judicial"
+                    />
+                    <FormControlLabel
+                      value="oficio"
+                      control={<Radio />}
+                      label="Ofício"
+                    />
+                  </RadioGroup>
+                </div>
+              </FormControl>
+            </div>
 
-              {processo.tipoProcesso === 'judicial' ? (
-                <Judicial judicial={judicial} setJudicial={setJudicial} />
-              ) : (
-                <div />
-              )}
+            {processo.tipoProcesso === 'administrativo' ? (
+              <Administrativo
+                administrativo={administrativo}
+                setAdministrativo={setAdministrativo}
+              />
+            ) : (
+              <div />
+            )}
 
-              {processo.tipoProcesso === 'oficio' ? (
-                <Oficio oficio={oficio} setOficio={setOficio} />
-              ) : (
-                <div />
-              )}
+            {processo.tipoProcesso === 'judicial' ? (
+              <Judicial judicial={judicial} setJudicial={setJudicial} />
+            ) : (
+              <div />
+            )}
 
-              <div className={classes.subButtonBox}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  className={classes.subButton}
-                >
-                  Cadastrar
-                </Button>
-              </div>
-            </form>
-          </div>
-        </div>
+            {processo.tipoProcesso === 'oficio' ? (
+              <Oficio oficio={oficio} setOficio={setOficio} />
+            ) : (
+              <div />
+            )}
+
+            <div className={classes.subButtonBox}>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                className={classes.subButton}
+              >
+                Cadastrar
+              </Button>
+            </div>
+          </form>
+        </DefaultBox>
       </main>
     </ThemeProvider>
   );
