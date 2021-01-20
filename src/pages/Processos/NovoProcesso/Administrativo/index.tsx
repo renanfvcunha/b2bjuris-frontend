@@ -28,7 +28,6 @@ interface IAdministrativo {
     uf: string;
     cidade: string;
     telefone: string;
-    observacoes: string;
   };
   setAdministrativo: Dispatch<
     SetStateAction<IAdministrativo['administrativo']>
@@ -222,7 +221,7 @@ const Administrativo: React.FC<IAdministrativo> = ({
         </FormControl>
       </div>
 
-      <div className={classes.fieldsBox}>
+      <div className={classes.fieldsBoxLeft}>
         <TextField
           label="Telefone"
           placeholder="(xx) xxxx-xxxx"
@@ -235,20 +234,6 @@ const Administrativo: React.FC<IAdministrativo> = ({
             setAdministrativo({
               ...administrativo,
               telefone: e.target.value,
-            })
-          }
-        />
-
-        <TextField
-          label="Observações"
-          variant="outlined"
-          style={{ width: 600 }}
-          className={classes.field}
-          value={administrativo.observacoes}
-          onChange={e =>
-            setAdministrativo({
-              ...administrativo,
-              observacoes: e.target.value,
             })
           }
         />
@@ -268,7 +253,6 @@ Administrativo.propTypes = {
     uf: PropTypes.string.isRequired,
     cidade: PropTypes.string.isRequired,
     telefone: PropTypes.string.isRequired,
-    observacoes: PropTypes.string.isRequired,
   }).isRequired,
   setAdministrativo: PropTypes.func.isRequired,
 };

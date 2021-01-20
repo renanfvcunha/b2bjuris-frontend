@@ -27,6 +27,7 @@ import {
 } from '@material-ui/core';
 import { ArrowBack, RemoveCircle } from '@material-ui/icons';
 
+import { toast } from 'react-toastify';
 import useStyles, { Purple, Red } from './styles';
 import DefaultBox from '../../../components/DefaultBox';
 import { ProcessoContext } from '../../../contexts/processoContext';
@@ -55,6 +56,7 @@ const NovoProcesso: React.FC = () => {
     nomeParte: '',
     assunto: '',
     tipoProcesso: '',
+    observacoes: '',
   });
   const [administrativo, setAdministrativo] = useState({
     matricula: '',
@@ -66,7 +68,6 @@ const NovoProcesso: React.FC = () => {
     uf: '',
     cidade: '',
     telefone: '',
-    observacoes: '',
   });
   const [judicial, setJudicial] = useState({
     tipoAcao: '',
@@ -120,6 +121,19 @@ const NovoProcesso: React.FC = () => {
       }
 
       const addFiles = [...arquivos];
+      const exists = addFiles.find(file => {
+        const newFileExists = newFiles.find(newFile => {
+          if (file.name === newFile.name) {
+            return newFile;
+          }
+          return undefined;
+        });
+        return newFileExists;
+      });
+      if (exists) {
+        toast.warning('Há arquivo(s) com o mesmo nome na lista de anexos.');
+        return;
+      }
       addFiles.push(...newFiles);
       setArquivos(addFiles);
 
@@ -294,7 +308,7 @@ const NovoProcesso: React.FC = () => {
                 ))}
               </div>
             ) : (
-              ''
+              <div />
             )}
 
             <div className={classes.tipoProcesso}>
@@ -302,8 +316,6 @@ const NovoProcesso: React.FC = () => {
                 <div className={classes.tipoProcessoItems}>
                   <FormLabel component="legend">Tipo de Processo</FormLabel>
                   <RadioGroup
-                    aria-label="gender"
-                    name="gender1"
                     style={{ display: 'inline' }}
                     value={processo.tipoProcesso}
                     onChange={handleChangeTipoProcesso}
@@ -348,6 +360,22 @@ const NovoProcesso: React.FC = () => {
             ) : (
               <div />
             )}
+
+            <div className={classes.fieldsBoxLeft}>
+              <TextField
+                label="Observações"
+                variant="outlined"
+                fullWidth
+                className={classes.field}
+                value={processo.observacoes}
+                onChange={e =>
+                  setProcesso({
+                    ...processo,
+                    observacoes: e.target.value,
+                  })
+                }
+              />
+            </div>
 
             <div className={classes.subButtonBox}>
               <Button

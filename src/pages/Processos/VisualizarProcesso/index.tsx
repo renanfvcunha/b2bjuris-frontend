@@ -17,6 +17,7 @@ interface IProcesso {
   numero_processo: number;
   nome_parte: string;
   tipo_processo: string;
+  observacoes: string | null;
   created_at: string;
   status: {
     status: string;
@@ -44,7 +45,6 @@ interface IProcesso {
     cidade: string;
     uf: string;
     telefone: string;
-    observacoes: string | null;
   };
   judicial?: {
     tipo_acao: {
@@ -80,10 +80,6 @@ const VisualizarProcesso: React.FC = () => {
 
     getProcesso();
   }, [id]);
-
-  useEffect(() => {
-    console.log(processo);
-  }, [processo]);
 
   return (
     <ThemeProvider theme={Purple}>
@@ -203,12 +199,6 @@ const VisualizarProcesso: React.FC = () => {
                     {processo.administrativo.telefone}
                   </span>
                 </div>
-                <div>
-                  <span className={classes.key}>Observações:</span>
-                  <span className={classes.value}>
-                    {processo.administrativo.observacoes}
-                  </span>
-                </div>
               </>
             ) : (
               <div />
@@ -234,7 +224,7 @@ const VisualizarProcesso: React.FC = () => {
                 <div>
                   <span className={classes.key}>Tipo de Ação:</span>
                   <span className={classes.value}>
-                    {processo.judicial.tipo_acao.tipo_acao}
+                    {processo.judicial.tipo_acao?.tipo_acao}
                   </span>
                 </div>
               </>
@@ -260,6 +250,11 @@ const VisualizarProcesso: React.FC = () => {
             ) : (
               <div />
             )}
+
+            <div>
+              <span className={classes.key}>Observações:</span>
+              <span className={classes.value}>{processo.observacoes}</span>
+            </div>
           </div>
         </DefaultBox>
       </main>

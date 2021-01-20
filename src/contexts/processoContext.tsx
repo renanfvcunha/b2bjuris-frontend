@@ -10,6 +10,7 @@ interface IProcesso {
     nomeParte: string;
     assunto: string;
     tipoProcesso: string;
+    observacoes: string;
   };
   administrativo: {
     matricula: string;
@@ -21,7 +22,6 @@ interface IProcesso {
     uf: string;
     cidade: string;
     telefone: string;
-    observacoes: string;
   };
   judicial: {
     tipoAcao: string;
@@ -69,6 +69,7 @@ const ProcessoProvider: React.FC = ({ children }) => {
     formProcess.append('nome_parte', processo.nomeParte);
     formProcess.append('tipo_processo', processo.tipoProcesso);
     formProcess.append('assunto', processo.assunto);
+    formProcess.append('observacoes', processo.observacoes);
 
     if (processo.tipoProcesso === 'administrativo') {
       formProcess.append('matricula', administrativo.matricula);
@@ -80,7 +81,6 @@ const ProcessoProvider: React.FC = ({ children }) => {
       formProcess.append('cidade', administrativo.cidade);
       formProcess.append('uf', administrativo.uf);
       formProcess.append('telefone', administrativo.telefone);
-      formProcess.append('observacoes', administrativo.observacoes);
     } else if (processo.tipoProcesso === 'judicial') {
       formProcess.append('tipo_acao', judicial.tipoAcao);
       formProcess.append('polo_passivo', judicial.poloPassivo);

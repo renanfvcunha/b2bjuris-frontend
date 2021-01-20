@@ -53,6 +53,10 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'center',
     marginTop: theme.spacing(3),
   },
+  fieldsBoxLeft: {
+    display: 'block',
+    margin: `${theme.spacing(3)}px 150px 0 150px`,
+  },
   tipoProcessoItems: {
     display: 'flex',
     flexDirection: 'column',
