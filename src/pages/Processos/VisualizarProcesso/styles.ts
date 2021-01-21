@@ -1,4 +1,5 @@
 import { createMuiTheme, makeStyles } from '@material-ui/core/styles';
+import { blue, green } from '@material-ui/core/colors';
 
 import defaultStyles from '../../../utils/defaultStyles';
 
@@ -34,6 +35,14 @@ const useStyles = makeStyles(theme => ({
     marginLeft: 8,
     fontWeight: 500,
   },
+  buttons: {
+    float: 'right',
+    marginRight: 120,
+    marginBottom: 12,
+  },
+  btn: {
+    marginLeft: 8,
+  },
 }));
 
 export const Purple = createMuiTheme({
@@ -47,12 +56,15 @@ export const Purple = createMuiTheme({
   },
 });
 
-/* export const Red = createMuiTheme({
+export const Buttons = createMuiTheme({
   palette: {
     primary: {
-      main: red['500'],
+      main: blue['600'],
+    },
+    secondary: {
+      main: green['600'],
     },
   },
-}); */
+});
 
 export default useStyles;

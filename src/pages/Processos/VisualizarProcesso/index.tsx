@@ -6,12 +6,14 @@ import {
   Tooltip,
   Fab,
   ThemeProvider,
+  Button,
 } from '@material-ui/core';
-import { ArrowBack } from '@material-ui/icons';
+import { ArrowBack, Search, Forward, Edit } from '@material-ui/icons';
 
-import useStyles, { Purple } from './styles';
+import useStyles, { Purple, Buttons } from './styles';
 import DefaultBox from '../../../components/DefaultBox';
 import api from '../../../services/api';
+import HistoricoProcesso from './HistoricoProcesso';
 
 interface IProcesso {
   numero_processo: number;
@@ -70,6 +72,13 @@ const VisualizarProcesso: React.FC = () => {
   const history = useHistory();
 
   const [processo, setProcesso] = useState<IProcesso>({} as IProcesso);
+  const [modalHistorico, setModalHistorico] = useState(false);
+
+  const closeModal = () => {
+    if (modalHistorico) {
+      setModalHistorico(false);
+    }
+  };
 
   useEffect(() => {
     const getProcesso = async () => {
@@ -141,7 +150,9 @@ const VisualizarProcesso: React.FC = () => {
                     </span>
                   ))
                 ) : (
-                  <span className={classes.value}>Sem anexos</span>
+                  <span className={classes.value} style={{ marginLeft: 0 }}>
+                    Sem anexos
+                  </span>
                 )}
               </span>
             </div>
@@ -256,7 +267,34 @@ const VisualizarProcesso: React.FC = () => {
               <span className={classes.value}>{processo.observacoes}</span>
             </div>
           </div>
+
+          <div className={classes.buttons}>
+            <Button variant="contained" color="primary">
+              <Edit style={{ marginRight: 8 }} />
+              Alterar Status
+            </Button>
+            <ThemeProvider theme={Buttons}>
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.btn}
+                onClick={() => setModalHistorico(true)}
+              >
+                <Search style={{ marginRight: 8 }} />
+                Consultar Histórico
+              </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                className={classes.btn}
+              >
+                <Forward style={{ marginRight: 8 }} />
+                Encaminhar
+              </Button>
+            </ThemeProvider>
+          </div>
         </DefaultBox>
+        <HistoricoProcesso open={modalHistorico} close={closeModal} />
       </main>
     </ThemeProvider>
   );
