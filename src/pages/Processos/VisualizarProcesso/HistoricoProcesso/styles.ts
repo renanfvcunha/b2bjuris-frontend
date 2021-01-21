@@ -16,6 +16,9 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(1, 2, 1),
       backgroundColor: defaultStyles.defaultBoxBackground,
     },
+    table: {
+      maxWidth: 1140,
+    },
   })
 );
 

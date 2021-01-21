@@ -28,8 +28,9 @@ interface IProcesso {
     nome: string;
   }[];
   historico: {
+    id: number;
     descricao: string;
-    created_at: string;
+    created_at: Date;
     usuario: {
       nome: string;
     };
@@ -226,7 +227,7 @@ const VisualizarProcesso: React.FC = () => {
                 <div>
                   <span className={classes.key}>Valor da Causa:</span>
                   <span className={classes.value}>
-                    {processo.judicial.valor_causa.toLocaleString('pt-br', {
+                    {processo.judicial.valor_causa.toLocaleString('pt-BR', {
                       style: 'currency',
                       currency: 'BRL',
                     })}
@@ -294,7 +295,11 @@ const VisualizarProcesso: React.FC = () => {
             </ThemeProvider>
           </div>
         </DefaultBox>
-        <HistoricoProcesso open={modalHistorico} close={closeModal} />
+        <HistoricoProcesso
+          open={modalHistorico}
+          close={closeModal}
+          historico={processo.historico}
+        />
       </main>
     </ThemeProvider>
   );
