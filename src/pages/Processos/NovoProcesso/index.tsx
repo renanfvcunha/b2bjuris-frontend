@@ -30,6 +30,7 @@ import { ArrowBack, RemoveCircle } from '@material-ui/icons';
 import { toast } from 'react-toastify';
 import useStyles, { Purple, Red } from './styles';
 import DefaultBox from '../../../components/DefaultBox';
+import { PageTitleContext } from '../../../contexts/pageTitleContext';
 import { ProcessoContext } from '../../../contexts/processoContext';
 import api from '../../../services/api';
 import Administrativo from './Administrativo';
@@ -40,6 +41,7 @@ const NovoProcesso: React.FC = () => {
   const classes = useStyles();
   const inputFileRef: RefObject<HTMLInputElement> = createRef();
   const history = useHistory();
+  const { handleSetPageTitle } = useContext(PageTitleContext);
   const { cadastrarProcesso, success, setSuccessFalse } = useContext(
     ProcessoContext
   );
@@ -158,6 +160,11 @@ const NovoProcesso: React.FC = () => {
 
     cadastrarProcesso(processo, administrativo, judicial, oficio, arquivos);
   };
+
+  useEffect(() => {
+    document.title = 'Novo Processo - B2B Juris';
+    handleSetPageTitle('Novo Processo');
+  }, [handleSetPageTitle]);
 
   useEffect(() => {
     const getAssuntos = async () => {
@@ -297,7 +304,7 @@ const NovoProcesso: React.FC = () => {
                         </Tooltip>
                       </ThemeProvider>
                     ) : (
-                      ''
+                      <div />
                     )}
                     {i !== 0 && i !== arquivos.length ? (
                       <span>,&nbsp;</span>

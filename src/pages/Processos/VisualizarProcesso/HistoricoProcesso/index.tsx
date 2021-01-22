@@ -19,7 +19,7 @@ interface IModal {
   historico?: {
     id: number;
     descricao: string;
-    created_at: Date;
+    created_at: string;
     usuario: {
       nome: string;
     };
@@ -67,7 +67,7 @@ HistoricoProcesso.propTypes = {
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       descricao: PropTypes.string.isRequired,
-      created_at: PropTypes.instanceOf(Date).isRequired,
+      created_at: PropTypes.string.isRequired,
       usuario: PropTypes.shape({
         nome: PropTypes.string.isRequired,
       }).isRequired,
@@ -80,7 +80,7 @@ HistoricoProcesso.defaultProps = {
     {
       id: 0,
       descricao: '',
-      created_at: new Date(''),
+      created_at: '',
       usuario: {
         nome: '',
       },

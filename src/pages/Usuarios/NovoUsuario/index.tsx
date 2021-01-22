@@ -73,21 +73,13 @@ const NovoUsuario: React.FC<IModal> = ({ open, close, setSuccess }) => {
     } catch (err) {
       if (err.message === 'Network Error') {
         toast.error(
-          'Não foi possível conectar ao servidor. Tente novamente ou contate o suporte.',
-          {
-            position: 'top-center',
-          }
+          'Não foi possível conectar ao servidor. Tente novamente ou contate o suporte.'
         );
       } else if (err.response) {
-        toast.error(err.response.data.msg, {
-          position: 'top-center',
-        });
+        toast.error(err.response.data.msg);
       } else {
         toast.error(
-          'Erro ao cadastrar usuário. Tente novamente ou contate o suporte.',
-          {
-            position: 'top-center',
-          }
+          'Erro ao cadastrar usuário. Tente novamente ou contate o suporte.'
         );
       }
     }

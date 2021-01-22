@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import {
   Typography,
@@ -11,26 +11,29 @@ import {
 import { ArrowBack, Search, Forward, Edit } from '@material-ui/icons';
 
 import useStyles, { Purple, Buttons } from './styles';
+import { PageTitleContext } from '../../../contexts/pageTitleContext';
 import DefaultBox from '../../../components/DefaultBox';
 import api from '../../../services/api';
 import HistoricoProcesso from './HistoricoProcesso';
+import AlterarStatus from './AlterarStatus';
 
 interface IProcesso {
   numero_processo: number;
   nome_parte: string;
   tipo_processo: string;
   observacoes: string | null;
-  created_at: string;
   status: {
     status: string;
   } | null;
   arquivo: {
+    id: number;
     nome: string;
+    url: string;
   }[];
   historico: {
     id: number;
     descricao: string;
-    created_at: Date;
+    created_at: string;
     usuario: {
       nome: string;
     };
@@ -70,26 +73,53 @@ interface IProcesso {
 const VisualizarProcesso: React.FC = () => {
   const classes = useStyles();
   const { id } = useParams<{ id: string }>();
+  const { handleSetPageTitle } = useContext(PageTitleContext);
   const history = useHistory();
 
   const [processo, setProcesso] = useState<IProcesso>({} as IProcesso);
   const [modalHistorico, setModalHistorico] = useState(false);
+  const [modalStatus, setModalStatus] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  const getProcesso = useCallback(async () => {
+    const response = await api.get(`/processos/${id}`);
+
+    setProcesso(response.data);
+  }, [id]);
+
+  const refreshData = useCallback(() => {
+    if (success) {
+      getProcesso();
+    }
+  }, [success, getProcesso]);
+
+  const setSuccessTrue = () => {
+    setSuccess(true);
+  };
 
   const closeModal = () => {
     if (modalHistorico) {
       setModalHistorico(false);
     }
+
+    if (modalStatus) {
+      setModalStatus(false);
+    }
   };
 
   useEffect(() => {
-    const getProcesso = async () => {
-      const response = await api.get(`/processos/${id}`);
+    document.title = 'Visualizar Processo - B2B Juris';
+    handleSetPageTitle('Visualizar Processo');
+  }, [handleSetPageTitle]);
 
-      setProcesso(response.data);
-    };
+  useEffect(() => {
+    refreshData();
 
+    if (success) {
+      setSuccess(false);
+    }
     getProcesso();
-  }, [id]);
+  }, [refreshData, success, id, getProcesso]);
 
   return (
     <ThemeProvider theme={Purple}>
@@ -145,8 +175,8 @@ const VisualizarProcesso: React.FC = () => {
               <span style={{ marginLeft: 8 }}>
                 {processo.arquivo && processo.arquivo.length !== 0 ? (
                   processo.arquivo.map(arquivo => (
-                    <span key={arquivo.nome.split('/').pop()}>
-                      <a href={arquivo.nome}>{arquivo.nome.split('/').pop()}</a>
+                    <span key={arquivo.id}>
+                      <a href={arquivo.url}>{arquivo.nome}</a>
                       ,&nbsp;
                     </span>
                   ))
@@ -270,10 +300,16 @@ const VisualizarProcesso: React.FC = () => {
           </div>
 
           <div className={classes.buttons}>
-            <Button variant="contained" color="primary">
-              <Edit style={{ marginRight: 8 }} />
-              Alterar Status
-            </Button>
+            {(processo.administrativo || processo.judicial) && (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => setModalStatus(true)}
+              >
+                <Edit style={{ marginRight: 8 }} />
+                Alterar Status
+              </Button>
+            )}
             <ThemeProvider theme={Buttons}>
               <Button
                 variant="contained"
@@ -299,6 +335,14 @@ const VisualizarProcesso: React.FC = () => {
           open={modalHistorico}
           close={closeModal}
           historico={processo.historico}
+        />
+        <AlterarStatus
+          open={modalStatus}
+          close={closeModal}
+          idProcesso={id}
+          tipoProcesso={processo.tipo_processo}
+          status={processo.status}
+          setSuccess={setSuccessTrue}
         />
       </main>
     </ThemeProvider>
