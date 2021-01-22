@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 
 import api from '../services/api';
+import masks from '../utils/masks';
 
 interface IProcesso {
   processo: {
@@ -84,7 +85,10 @@ const ProcessoProvider: React.FC = ({ children }) => {
     } else if (processo.tipoProcesso === 'judicial') {
       formProcess.append('tipo_acao', judicial.tipoAcao);
       formProcess.append('polo_passivo', judicial.poloPassivo);
-      formProcess.append('valor_causa', judicial.valorCausa);
+      formProcess.append(
+        'valor_causa',
+        masks.formatBrToEn(judicial.valorCausa)
+      );
     } else if (processo.tipoProcesso === 'oficio') {
       formProcess.append('processo_ref', oficio.referencia);
       formProcess.append('secretaria', oficio.secretaria);

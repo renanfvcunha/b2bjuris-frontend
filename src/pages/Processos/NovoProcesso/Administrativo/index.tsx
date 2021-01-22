@@ -16,6 +16,7 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 
 import useStyles from './styles';
+import masks from '../../../../utils/masks';
 
 interface IAdministrativo {
   administrativo: {
@@ -99,7 +100,6 @@ const Administrativo: React.FC<IAdministrativo> = ({
 
         <TextField
           label="CPF"
-          placeholder="xxx.xxx.xxx-xx"
           variant="outlined"
           style={{ width: 160 }}
           required
@@ -108,7 +108,7 @@ const Administrativo: React.FC<IAdministrativo> = ({
           onChange={e =>
             setAdministrativo({
               ...administrativo,
-              cpf: e.target.value,
+              cpf: masks.cpfMask(e.target.value),
             })
           }
         />
@@ -233,7 +233,7 @@ const Administrativo: React.FC<IAdministrativo> = ({
           onChange={e =>
             setAdministrativo({
               ...administrativo,
-              telefone: e.target.value,
+              telefone: masks.telefoneMask(e.target.value),
             })
           }
         />

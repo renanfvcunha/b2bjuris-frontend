@@ -18,6 +18,7 @@ import PropTypes from 'prop-types';
 
 import useStyles from './styles';
 import api from '../../../../services/api';
+import masks from '../../../../utils/masks';
 
 interface IJudicial {
   judicial: {
@@ -101,7 +102,7 @@ const Judicial: React.FC<IJudicial> = ({ judicial, setJudicial }) => {
           onChange={e =>
             setJudicial({
               ...judicial,
-              valorCausa: e.target.value,
+              valorCausa: masks.brlMask(e.target.value),
             })
           }
           startAdornment={<InputAdornment position="start">R$</InputAdornment>}
