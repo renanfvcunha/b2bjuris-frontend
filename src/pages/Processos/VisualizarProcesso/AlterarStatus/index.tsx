@@ -49,7 +49,7 @@ const AlterarStatus: React.FC<IModal> = ({
 
   const handleChangeStatus = async () => {
     try {
-      const response: AxiosResponse<{ msg: string }> = await api.put(
+      const response: AxiosResponse<{ msg: string }> = await api.patch(
         `/processos/${idProcesso}`,
         {
           status: statusSelected,

@@ -16,6 +16,7 @@ import DefaultBox from '../../../components/DefaultBox';
 import api from '../../../services/api';
 import HistoricoProcesso from './HistoricoProcesso';
 import AlterarStatus from './AlterarStatus';
+import EncaminharProcesso from './EncaminharProcesso';
 
 interface IProcesso {
   numero_processo: number;
@@ -79,6 +80,7 @@ const VisualizarProcesso: React.FC = () => {
   const [processo, setProcesso] = useState<IProcesso>({} as IProcesso);
   const [modalHistorico, setModalHistorico] = useState(false);
   const [modalStatus, setModalStatus] = useState(false);
+  const [modalEncaminhar, setModalEncaminhar] = useState(false);
   const [success, setSuccess] = useState(false);
 
   const getProcesso = useCallback(async () => {
@@ -104,6 +106,10 @@ const VisualizarProcesso: React.FC = () => {
 
     if (modalStatus) {
       setModalStatus(false);
+    }
+
+    if (modalEncaminhar) {
+      setModalEncaminhar(false);
     }
   };
 
@@ -324,6 +330,7 @@ const VisualizarProcesso: React.FC = () => {
                 variant="contained"
                 color="secondary"
                 className={classes.btn}
+                onClick={() => setModalEncaminhar(true)}
               >
                 <Forward style={{ marginRight: 8 }} />
                 Encaminhar
@@ -342,6 +349,12 @@ const VisualizarProcesso: React.FC = () => {
           idProcesso={id}
           tipoProcesso={processo.tipo_processo}
           status={processo.status}
+          setSuccess={setSuccessTrue}
+        />
+        <EncaminharProcesso
+          open={modalEncaminhar}
+          idProcesso={id}
+          close={closeModal}
           setSuccess={setSuccessTrue}
         />
       </main>
