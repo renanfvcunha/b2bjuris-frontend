@@ -1,5 +1,5 @@
 import { createMuiTheme, makeStyles } from '@material-ui/core/styles';
-import { blue, green } from '@material-ui/core/colors';
+import { blue, green, red } from '@material-ui/core/colors';
 
 import defaultStyles from '../../../utils/defaultStyles';
 
@@ -34,6 +34,12 @@ const useStyles = makeStyles(theme => ({
     fontSize: 18,
     marginLeft: 8,
     fontWeight: 500,
+  },
+  textRed: {
+    color: red['500'],
+  },
+  textBlue: {
+    color: blue['500'],
   },
   buttons: {
     float: 'right',

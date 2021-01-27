@@ -9,6 +9,7 @@ import {
   Button,
 } from '@material-ui/core';
 import { ArrowBack, Search, Forward, Edit } from '@material-ui/icons';
+import clsx from 'clsx';
 
 import useStyles, { Purple, Buttons } from './styles';
 import { PageTitleContext } from '../../../contexts/pageTitleContext';
@@ -42,6 +43,13 @@ interface IProcesso {
   assunto: {
     assunto: string;
   } | null;
+  encaminhamento: {
+    id: number;
+    recebido: boolean;
+    usuario: {
+      nome: string;
+    };
+  }[];
   administrativo?: {
     matricula: number;
     cpf: string;
@@ -189,6 +197,29 @@ const VisualizarProcesso: React.FC = () => {
                 ) : (
                   <span className={classes.value} style={{ marginLeft: 0 }}>
                     Sem anexos
+                  </span>
+                )}
+              </span>
+            </div>
+            <div>
+              <span className={classes.key}>Encaminhado para:</span>
+              <span>
+                {processo.encaminhamento &&
+                processo.encaminhamento.length !== 0 ? (
+                  processo.encaminhamento.map((enc, i) => (
+                    <span
+                      key={enc.id}
+                      className={clsx(classes.value, {
+                        [classes.textRed]: !enc.recebido,
+                      })}
+                    >
+                      {enc.usuario.nome +
+                        (i !== processo.encaminhamento.length - 1 ? ',' : '')}
+                    </span>
+                  ))
+                ) : (
+                  <span className={classes.value} style={{ marginLeft: 8 }}>
+                    Processo não foi encaminhado
                   </span>
                 )}
               </span>
