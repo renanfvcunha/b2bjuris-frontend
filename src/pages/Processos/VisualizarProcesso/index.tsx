@@ -14,70 +14,11 @@ import clsx from 'clsx';
 import useStyles, { Purple, Buttons } from './styles';
 import { PageTitleContext } from '../../../contexts/pageTitleContext';
 import DefaultBox from '../../../components/DefaultBox';
+import IProcesso from '../../../typescript/IProcesso';
 import api from '../../../services/api';
 import HistoricoProcesso from './HistoricoProcesso';
 import AlterarStatus from './AlterarStatus';
 import EncaminharProcesso from './EncaminharProcesso';
-
-interface IProcesso {
-  numero_processo: number;
-  nome_parte: string;
-  tipo_processo: string;
-  observacoes: string | null;
-  status: {
-    status: string;
-  } | null;
-  arquivo: {
-    id: number;
-    nome: string;
-    url: string;
-  }[];
-  historico: {
-    id: number;
-    descricao: string;
-    created_at: string;
-    usuario: {
-      nome: string;
-    };
-  }[];
-  assunto: {
-    assunto: string;
-  } | null;
-  encaminhamento: {
-    id: number;
-    recebido: boolean;
-    usuario: {
-      nome: string;
-    };
-  }[];
-  administrativo?: {
-    matricula: number;
-    cpf: string;
-    endereco: string;
-    numero: number;
-    complemento: string | null;
-    bairro: string;
-    cidade: string;
-    uf: string;
-    telefone: string;
-  };
-  judicial?: {
-    tipo_acao: {
-      id: number;
-      tipo_acao: string;
-    };
-    polo_passivo: string;
-    valor_causa: number;
-  };
-  oficio?: {
-    processo_ref: {
-      numero_processo: number;
-    };
-    secretaria: {
-      secretaria: string;
-    };
-  };
-}
 
 const VisualizarProcesso: React.FC = () => {
   const classes = useStyles();
@@ -156,7 +97,7 @@ const VisualizarProcesso: React.FC = () => {
             variant="h4"
             className={classes.title}
           >
-            {`Processo nº ${processo.numero_processo}`}
+            Processo nº {processo.numero_processo}
           </Typography>
 
           <div className={classes.data}>

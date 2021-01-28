@@ -11,18 +11,17 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(3),
     backgroundColor: defaultStyles.defaultBackground,
   },
-  /* lastForms: {
+  title: {
+    marginTop: 12,
+    color: defaultStyles.purpleDark,
+    fontWeight: 'bold',
+  },
+  encList: {
     display: 'flex',
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  lastFormsBox: {
-    width: '30%',
-  },
-  lastFormsBtn: {
-    textTransform: 'none',
-    width: '100%',
-  }, */
 }));
 
 export default useStyles;

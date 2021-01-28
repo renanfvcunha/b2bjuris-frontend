@@ -78,7 +78,7 @@ const EncaminharProcesso: React.FC<IModal> = ({
     e.preventDefault();
 
     try {
-      const response = await api.post(`/encaminhar/${idProcesso}`, {
+      const response = await api.post(`/encaminhamentos/${idProcesso}`, {
         id_usuario: Number(idProcurador),
         id_tipo_encaminhamento: Number(idTipoEncaminhamento),
         prazo: prazo.toString(),
