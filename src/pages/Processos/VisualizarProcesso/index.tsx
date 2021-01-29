@@ -62,6 +62,17 @@ const VisualizarProcesso: React.FC = () => {
     }
   };
 
+  const breakTextArea = (text: string) => {
+    const newText = text.split('\n').map(str => (
+      <div key={Math.random()} className={classes.value}>
+        <span>{str}</span>
+        <br />
+      </div>
+    ));
+
+    return newText;
+  };
+
   useEffect(() => {
     document.title = 'Visualizar Processo - B2B Juris';
     handleSetPageTitle('Visualizar Processo');
@@ -273,7 +284,7 @@ const VisualizarProcesso: React.FC = () => {
 
             <div>
               <span className={classes.key}>Observações:</span>
-              <span className={classes.value}>{processo.observacoes}</span>
+              {breakTextArea(String(processo.observacoes))}
             </div>
           </div>
 

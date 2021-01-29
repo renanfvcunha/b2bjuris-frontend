@@ -25,11 +25,16 @@ const Home: React.FC = () => {
     IEncaminhamento
   >();
   const [encaminhamentos, setEncaminhamentos] = useState<IEncaminhamento[]>([]);
+  const [success, setSuccess] = useState(false);
 
   const handleCloseModal = () => {
     if (modalProcesso) {
       setModalProcesso(false);
     }
+  };
+
+  const setSuccessTrue = () => {
+    setSuccess(true);
   };
 
   const handleSetSelectedEncaminhamento = async (i: number) => {
@@ -48,6 +53,12 @@ const Home: React.FC = () => {
     setEncaminhamentos(response.data);
   };
 
+  const refreshData = useCallback(() => {
+    if (success) {
+      getEncaminhamentos();
+    }
+  }, [success]);
+
   useEffect(() => {
     getEncaminhamentos();
     handleOpenModalProcesso();
@@ -57,6 +68,14 @@ const Home: React.FC = () => {
     document.title = 'Home - B2B Juris';
     handleSetPageTitle('Início');
   }, [handleSetPageTitle]);
+
+  useEffect(() => {
+    refreshData();
+
+    if (success) {
+      setSuccess(false);
+    }
+  }, [refreshData, success]);
 
   return (
     <main className={classes.content}>
@@ -118,6 +137,7 @@ const Home: React.FC = () => {
         open={modalProcesso}
         close={handleCloseModal}
         encaminhamento={selectedEncaminhamento}
+        setSuccess={setSuccessTrue}
       />
     </main>
   );

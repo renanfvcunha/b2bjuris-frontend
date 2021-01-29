@@ -1,68 +1,141 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, ThemeProvider, Typography } from '@material-ui/core';
-import { CheckCircle, Visibility } from '@material-ui/icons';
+import {
+  Button,
+  Fab,
+  ThemeProvider,
+  Tooltip,
+  Typography,
+} from '@material-ui/core';
+import { ArrowBack, CheckCircle, Visibility } from '@material-ui/icons';
+import { toast } from 'react-toastify';
 
 import DefaultModal from '../../../components/DefaultModal';
 import IEncaminhamento from '../../../typescript/IEncaminhamento';
 import useStyles, { Buttons } from './styles';
+import ModalConfirmation from '../../../components/ModalConfirmation';
+import api from '../../../services/api';
 
 interface IModal {
   open: boolean;
   close(): void;
   encaminhamento?: IEncaminhamento;
+  setSuccess(): void;
 }
 
-const ModalProcesso: React.FC<IModal> = ({ open, close, encaminhamento }) => {
+const ModalProcesso: React.FC<IModal> = ({
+  open,
+  close,
+  encaminhamento,
+  setSuccess,
+}) => {
   const classes = useStyles();
 
-  return (
-    <DefaultModal open={open} close={close}>
-      <Typography
-        align="center"
-        component="h1"
-        variant="h4"
-        className={classes.title}
-      >
-        Processo nº {encaminhamento?.processo.numero_processo}
-      </Typography>
+  const [modalConfirmation, setModalConfirmation] = useState(false);
 
-      <div className={classes.data}>
-        <div>
-          <span className={classes.key}>Tipo:</span>
-          <span className={classes.value}>
-            {encaminhamento?.processo.tipo_processo}
-          </span>
-        </div>
-        <div>
-          <span className={classes.key}>Data:</span>
-          <span className={classes.value}>
-            {new Date(
-              encaminhamento?.processo.created_at || ''
-            ).toLocaleDateString()}
-          </span>
-        </div>
-        <div>
-          <span className={classes.key}>Prazo:</span>
-          <span className={classes.value}>
-            {new Date(encaminhamento?.prazo || '').toLocaleDateString()}
-          </span>
-        </div>
-        <div>
-          <span className={classes.key}>Tipo de Encaminhamento:</span>
-          <span className={classes.value}>
-            {encaminhamento?.tipo_encaminhamento.tipo_encaminhamento}
-          </span>
-        </div>
-        <div>
-          <span className={classes.key}>Observações:</span>
-          <span className={classes.value}>{encaminhamento?.observacoes}</span>
-        </div>
+  const handleModalClose = () => {
+    if (modalConfirmation) {
+      setModalConfirmation(false);
+    }
+  };
+
+  const markAsReceived = async () => {
+    try {
+      await api.patch(`/encaminhamentos/${encaminhamento?.id}`, {
+        recebido: true,
+      });
+
+      setSuccess();
+      setModalConfirmation(false);
+      close();
+    } catch (err) {
+      if (err.message === 'Network Error') {
+        toast.error(
+          'Não foi possível conectar ao servidor. Tente novamente ou contate o suporte.'
+        );
+      } else if (err.response) {
+        toast.error(err.response.data.msg);
+      } else {
+        toast.error(
+          'Erro ao marcar processo como recebido. Tente novamente ou contate o suporte.'
+        );
+      }
+    }
+  };
+
+  const breakTextArea = (text: string) => {
+    const newText = text.split('\n').map(str => (
+      <div key={Math.random()} className={classes.value}>
+        <span>{str}</span>
+        <br />
       </div>
+    ));
 
-      <ThemeProvider theme={Buttons}>
+    return newText;
+  };
+
+  return (
+    <ThemeProvider theme={Buttons}>
+      <DefaultModal open={open} close={close}>
+        <Tooltip
+          title="Voltar"
+          aria-label="back"
+          className={classes.backBtn}
+          onClick={close}
+        >
+          <Fab color="primary" size="small">
+            <ArrowBack />
+          </Fab>
+        </Tooltip>
+
+        <Typography
+          align="center"
+          component="h1"
+          variant="h4"
+          className={classes.title}
+        >
+          Processo nº {encaminhamento?.processo.numero_processo}
+        </Typography>
+
+        <div className={classes.data}>
+          <div>
+            <span className={classes.key}>Tipo:</span>
+            <span className={classes.value}>
+              {encaminhamento?.processo.tipo_processo}
+            </span>
+          </div>
+          <div>
+            <span className={classes.key}>Data:</span>
+            <span className={classes.value}>
+              {new Date(
+                encaminhamento?.processo.created_at || ''
+              ).toLocaleDateString()}
+            </span>
+          </div>
+          <div>
+            <span className={classes.key}>Prazo:</span>
+            <span className={classes.value}>
+              {new Date(encaminhamento?.prazo || '').toLocaleDateString()}
+            </span>
+          </div>
+          <div>
+            <span className={classes.key}>Tipo de Encaminhamento:</span>
+            <span className={classes.value}>
+              {encaminhamento?.tipo_encaminhamento.tipo_encaminhamento}
+            </span>
+          </div>
+          <div>
+            <span className={classes.key}>Observações:</span>
+            {breakTextArea(String(encaminhamento?.observacoes))}
+          </div>
+        </div>
+
         <div style={{ float: 'right' }}>
-          <Button variant="contained" color="primary">
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => setModalConfirmation(true)}
+          >
             <CheckCircle style={{ marginRight: 8 }} />
             Marcar como Recebido
           </Button>
@@ -75,8 +148,17 @@ const ModalProcesso: React.FC<IModal> = ({ open, close, encaminhamento }) => {
             Visualizar Processo
           </Button>
         </div>
-      </ThemeProvider>
-    </DefaultModal>
+        <ModalConfirmation
+          open={modalConfirmation}
+          close={handleModalClose}
+          confirmAction={markAsReceived}
+          title="Alerta"
+          msg={`Deseja marcar o processo nº ${encaminhamento?.processo.numero_processo} como recebido?`}
+          cancel="Cancelar"
+          confirm="Marcar"
+        />
+      </DefaultModal>
+    </ThemeProvider>
   );
 };
 
@@ -98,6 +180,7 @@ ModalProcesso.propTypes = {
       created_at: PropTypes.string.isRequired,
     }).isRequired,
   }),
+  setSuccess: PropTypes.func.isRequired,
 };
 
 ModalProcesso.defaultProps = {

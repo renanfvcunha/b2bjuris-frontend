@@ -189,7 +189,7 @@ const NovoProcesso: React.FC = () => {
       <main className={classes.content}>
         <div className={classes.toolbar} />
 
-        <DefaultBox>
+        <DefaultBox scrollable>
           <Tooltip
             title="Voltar"
             aria-label="back"
@@ -373,6 +373,7 @@ const NovoProcesso: React.FC = () => {
                 label="Observações"
                 variant="outlined"
                 fullWidth
+                multiline
                 className={classes.field}
                 value={processo.observacoes}
                 onChange={e =>

@@ -60,27 +60,17 @@ const Processos: React.FC = () => {
 
       setSuccess(true);
 
-      toast.success(response.data.msg, {
-        position: 'top-center',
-      });
+      toast.success(response.data.msg);
     } catch (err) {
       if (err.message === 'Network Error') {
         toast.error(
-          'Não foi possível conectar ao servidor. Tente novamente ou contate o suporte.',
-          {
-            position: 'top-center',
-          }
+          'Não foi possível conectar ao servidor. Tente novamente ou contate o suporte.'
         );
       } else if (err.response) {
-        toast.error(err.response.data.msg, {
-          position: 'top-center',
-        });
+        toast.error(err.response.data.msg);
       } else {
         toast.error(
-          'Erro ao remover processo. Tente novamente ou contate o suporte.',
-          {
-            position: 'top-center',
-          }
+          'Erro ao remover processo. Tente novamente ou contate o suporte.'
         );
       }
     }

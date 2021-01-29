@@ -6,11 +6,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  ThemeProvider,
 } from '@material-ui/core';
 import Paper, { PaperProps } from '@material-ui/core/Paper';
-import { createMuiTheme } from '@material-ui/core/styles';
-import { red } from '@material-ui/core/colors';
 import Draggable from 'react-draggable';
 import PropTypes from 'prop-types';
 
@@ -34,14 +31,6 @@ function PaperComponent(props: PaperProps) {
     </Draggable>
   );
 }
-
-const Red = createMuiTheme({
-  palette: {
-    secondary: {
-      main: red[800],
-    },
-  },
-});
 
 const ModalConfirmation: React.FC<Modal> = ({
   open,
@@ -70,11 +59,9 @@ const ModalConfirmation: React.FC<Modal> = ({
           <Button autoFocus onClick={close} color="primary">
             {cancel}
           </Button>
-          <ThemeProvider theme={Red}>
-            <Button onClick={confirmAction} color="secondary">
-              {confirm}
-            </Button>
-          </ThemeProvider>
+          <Button onClick={confirmAction} color="secondary">
+            {confirm}
+          </Button>
         </DialogActions>
       </Dialog>
     </div>

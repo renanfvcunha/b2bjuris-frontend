@@ -9,6 +9,9 @@ const useStyles = makeStyles(theme => ({
     color: defaultStyles.purpleDark,
     fontWeight: 'bold',
   },
+  backBtn: {
+    position: 'absolute',
+  },
   data: {
     margin: theme.spacing(2),
     minWidth: 600,
