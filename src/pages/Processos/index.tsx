@@ -148,7 +148,13 @@ const Processos: React.FC = () => {
                   align: 'left',
                 },
                 {
-                  title: 'Adicionado Em',
+                  title: 'Finalizado',
+                  field: 'finalizado',
+                  type: 'string',
+                  align: 'left',
+                },
+                {
+                  title: 'Gerado Em',
                   field: 'created_at',
                   type: 'datetime',
                   align: 'left',
@@ -215,7 +221,7 @@ const Processos: React.FC = () => {
                   icon: () => <Edit color="secondary" />,
                   tooltip: 'Editar Processo',
                   onClick: () => {
-                    alert('Processo Editado');
+                    alert('Em Breve');
                   },
                 },
                 {

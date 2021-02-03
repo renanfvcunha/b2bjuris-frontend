@@ -14,32 +14,33 @@ import {
   ThemeProvider,
   Button,
 } from '@material-ui/core';
-import { ArrowBack, Search, Forward, Edit } from '@material-ui/icons';
-import clsx from 'clsx';
+import {
+  ArrowBack,
+  Forward,
+  Edit,
+  AssignmentTurnedIn,
+} from '@material-ui/icons';
 
 import useStyles, { Purple, Buttons } from './styles';
-import { PageTitleContext } from '../../../contexts/pageTitleContext';
-import DefaultBox from '../../../components/DefaultBox';
-import IProcesso from '../../../typescript/IProcesso';
-import api from '../../../services/api';
-import HistoricoProcesso from './HistoricoProcesso';
-import AlterarStatus from './AlterarStatus';
-import EncaminharProcesso from './EncaminharProcesso';
+import { PageTitleContext } from '../../contexts/pageTitleContext';
+import DefaultBox from '../../components/DefaultBox';
+import IProcesso from '../../typescript/IProcesso';
+import api from '../../services/api';
+import AlterarProcesso from './AlterarProcesso';
 
-const VisualizarProcesso: React.FC = () => {
+const VisualizarEncaminhamento: React.FC = () => {
   const classes = useStyles();
   const { id } = useParams<{ id: string }>();
   const { handleSetPageTitle } = useContext(PageTitleContext);
   const history = useHistory();
 
   const [processo, setProcesso] = useState<IProcesso>({} as IProcesso);
-  const [modalHistorico, setModalHistorico] = useState(false);
-  const [modalStatus, setModalStatus] = useState(false);
+  const [modalAlterarProcesso, setModalAlterarProcesso] = useState(false);
   const [modalEncaminhar, setModalEncaminhar] = useState(false);
   const [success, setSuccess] = useState(false);
 
   const getProcesso = useCallback(async () => {
-    const response = await api.get(`/processos/${id}`);
+    const response = await api.get(`/encaminhamentos/${id}`);
 
     setProcesso(response.data);
   }, [id]);
@@ -50,17 +51,13 @@ const VisualizarProcesso: React.FC = () => {
     }
   }, [success, getProcesso]);
 
-  const setSuccessTrue = () => {
+  /* const setSuccessTrue = () => {
     setSuccess(true);
-  };
+  }; */
 
   const closeModal = () => {
-    if (modalHistorico) {
-      setModalHistorico(false);
-    }
-
-    if (modalStatus) {
-      setModalStatus(false);
+    if (modalAlterarProcesso) {
+      setModalAlterarProcesso(false);
     }
 
     if (modalEncaminhar) {
@@ -86,8 +83,8 @@ const VisualizarProcesso: React.FC = () => {
   };
 
   useEffect(() => {
-    document.title = 'Visualizar Processo - B2B Juris';
-    handleSetPageTitle('Visualizar Processo');
+    document.title = 'Visualizar Encaminhamento - B2B Juris';
+    handleSetPageTitle('Visualizar Encaminhamento');
   }, [handleSetPageTitle]);
 
   useEffect(() => {
@@ -132,6 +129,15 @@ const VisualizarProcesso: React.FC = () => {
               <span className={classes.key}>Tipo de processo:</span>
               <span className={classes.value}>{processo.tipo_processo}</span>
             </div>
+            <div>
+              <span className={classes.key}>Tipo de encaminhamento:</span>
+              <span className={classes.value}>
+                {processo.encaminhamento
+                  ? processo.encaminhamento[0].tipo_encaminhamento
+                      .tipo_encaminhamento
+                  : ''}
+              </span>
+            </div>
             {!processo.oficio ? (
               <div>
                 <span className={classes.key}>Status:</span>
@@ -161,40 +167,6 @@ const VisualizarProcesso: React.FC = () => {
                 ) : (
                   <span className={classes.value} style={{ marginLeft: 0 }}>
                     Sem anexos
-                  </span>
-                )}
-              </span>
-            </div>
-            <div>
-              <Tooltip
-                title={
-                  <>
-                    <span>Vermelho: Processo não recebido</span>
-                    <br />
-                    <span>Preto: Processo recebido</span>
-                  </>
-                }
-                arrow
-              >
-                <span className={classes.key}>Encaminhado para:</span>
-              </Tooltip>
-              <span>
-                {processo.encaminhamento &&
-                processo.encaminhamento.length !== 0 ? (
-                  processo.encaminhamento.map((enc, i) => (
-                    <span
-                      key={enc.id}
-                      className={clsx(classes.value, {
-                        [classes.textRed]: !enc.recebido,
-                      })}
-                    >
-                      {enc.usuario.nome +
-                        (i !== processo.encaminhamento.length - 1 ? ',' : '')}
-                    </span>
-                  ))
-                ) : (
-                  <span className={classes.value} style={{ marginLeft: 8 }}>
-                    Processo não foi encaminhado
                   </span>
                 )}
               </span>
@@ -321,25 +293,15 @@ const VisualizarProcesso: React.FC = () => {
           </div>
 
           <div className={classes.buttons}>
-            {(processo.administrativo || processo.judicial) && (
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => setModalStatus(true)}
-              >
-                <Edit style={{ marginRight: 8 }} />
-                Alterar Status
-              </Button>
-            )}
             <ThemeProvider theme={Buttons}>
               <Button
                 variant="contained"
                 color="primary"
                 className={classes.btn}
-                onClick={() => setModalHistorico(true)}
+                onClick={() => setModalAlterarProcesso(true)}
               >
-                <Search style={{ marginRight: 8 }} />
-                Consultar Histórico
+                <Edit className={classes.icon} />
+                Alterar Processo
               </Button>
               <Button
                 variant="contained"
@@ -347,34 +309,27 @@ const VisualizarProcesso: React.FC = () => {
                 className={classes.btn}
                 onClick={() => setModalEncaminhar(true)}
               >
-                <Forward style={{ marginRight: 8 }} />
+                <Forward className={classes.icon} />
                 Encaminhar
               </Button>
             </ThemeProvider>
+            <Button variant="contained" color="primary" className={classes.btn}>
+              <AssignmentTurnedIn className={classes.icon} />
+              Finalizar Processo
+            </Button>
           </div>
         </DefaultBox>
-        <HistoricoProcesso
-          open={modalHistorico}
+        <AlterarProcesso
+          open={modalAlterarProcesso}
           close={closeModal}
-          historico={processo.historico}
-        />
-        <AlterarStatus
-          open={modalStatus}
-          close={closeModal}
-          idProcesso={id}
           tipoProcesso={processo.tipo_processo}
-          status={processo.status}
-          setSuccess={setSuccessTrue}
-        />
-        <EncaminharProcesso
-          open={modalEncaminhar}
+          idStatus={String(processo.status?.id)}
           idProcesso={id}
-          close={closeModal}
-          setSuccess={setSuccessTrue}
+          refreshData={getProcesso}
         />
       </main>
     </ThemeProvider>
   );
 };
 
-export default VisualizarProcesso;
+export default VisualizarEncaminhamento;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import {
   Button,
   Fab,
@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core';
 import { ArrowBack, CheckCircle, Visibility } from '@material-ui/icons';
 import { toast } from 'react-toastify';
+import PropTypes from 'prop-types';
 
 import DefaultModal from '../../../components/DefaultModal';
 import IEncaminhamento from '../../../typescript/IEncaminhamento';
@@ -30,6 +31,7 @@ const ModalProcesso: React.FC<IModal> = ({
   setSuccess,
 }) => {
   const classes = useStyles();
+  const history = useHistory();
 
   const [modalConfirmation, setModalConfirmation] = useState(false);
 
@@ -131,21 +133,26 @@ const ModalProcesso: React.FC<IModal> = ({
         </div>
 
         <div style={{ float: 'right' }}>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => setModalConfirmation(true)}
-          >
-            <CheckCircle style={{ marginRight: 8 }} />
-            Marcar como Recebido
-          </Button>
+          {!encaminhamento?.recebido && (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setModalConfirmation(true)}
+            >
+              <CheckCircle style={{ marginRight: 8 }} />
+              Marcar como Recebido
+            </Button>
+          )}
           <Button
             variant="contained"
             color="secondary"
             style={{ marginLeft: 8 }}
+            onClick={() =>
+              history.push(`/encaminhamentos/${encaminhamento?.processo.id}`)
+            }
           >
             <Visibility style={{ marginRight: 8 }} />
-            Visualizar Processo
+            Visualizar Encaminhamento
           </Button>
         </div>
         <ModalConfirmation

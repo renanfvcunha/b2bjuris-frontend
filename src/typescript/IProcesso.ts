@@ -2,8 +2,15 @@ export default interface IProcesso {
   numero_processo: number;
   nome_parte: string;
   tipo_processo: string;
-  observacoes: string | null;
+  observacoes: {
+    id: number;
+    observacoes: string;
+    usuario: {
+      nome: string;
+    };
+  }[];
   status: {
+    id: number;
     status: string;
   } | null;
   arquivo: {
@@ -27,6 +34,9 @@ export default interface IProcesso {
     recebido: boolean;
     usuario: {
       nome: string;
+    };
+    tipo_encaminhamento: {
+      tipo_encaminhamento: string;
     };
   }[];
   administrativo?: {

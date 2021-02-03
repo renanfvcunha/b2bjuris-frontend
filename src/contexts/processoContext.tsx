@@ -43,6 +43,12 @@ interface ProcessoContextData {
     oficio: IProcesso['oficio'],
     arquivos: File[]
   ): Promise<void>;
+  alterarProcesso(
+    idProcesso: string,
+    status: string,
+    arquivos: File[],
+    observacoes: string
+  ): Promise<void>;
   success: boolean;
   setSuccessFalse(): void;
 }
@@ -115,7 +121,48 @@ const ProcessoProvider: React.FC = ({ children }) => {
         toast.error(err.response.data.msg);
       } else {
         toast.error(
-          'Erro ao cadastrar usuário. Tente novamente ou contate o suporte.'
+          'Erro ao cadastrar processo. Tente novamente ou contate o suporte.'
+        );
+      }
+    }
+  };
+
+  const alterarProcesso = async (
+    idProcesso: string,
+    status: string,
+    arquivos: File[],
+    observacoes: string
+  ) => {
+    const formProcess = new FormData();
+    formProcess.append('status', status);
+    if (arquivos !== []) {
+      for (let i = 0; i < arquivos.length; i += 1) {
+        formProcess.append('doc', arquivos[i]);
+      }
+    }
+    formProcess.append('observacoes', observacoes);
+
+    try {
+      const response = await api.patch(
+        `/updatebyproc/${idProcesso}`,
+        formProcess,
+        {
+          headers: { 'Content-Type': 'multipart/formdata' },
+        }
+      );
+
+      toast.success(response.data.msg);
+      setSuccess(true);
+    } catch (err) {
+      if (err.message === 'Network Error') {
+        toast.error(
+          'Não foi possível conectar ao servidor. Tente novamente ou contate o suporte.'
+        );
+      } else if (err.response) {
+        toast.error(err.response.data.msg);
+      } else {
+        toast.error(
+          'Erro ao alterar processo. Tente novamente ou contate o suporte.'
         );
       }
     }
@@ -125,6 +172,7 @@ const ProcessoProvider: React.FC = ({ children }) => {
     <ProcessoContext.Provider
       value={{
         cadastrarProcesso,
+        alterarProcesso,
         success,
         setSuccessFalse,
       }}
