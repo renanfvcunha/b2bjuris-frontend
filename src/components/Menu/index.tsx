@@ -159,20 +159,24 @@ const Menu: React.FC = () => {
             </List>
           </Link>
 
-          <Link to="/usuarios" className={classes.link}>
-            <List>
-              <ListItem
-                button
-                onClick={() => setChangePathName(true)}
-                selected={pathName === 'usuarios'}
-              >
-                <ListItemIcon>
-                  <Group className={classes.icon} />
-                </ListItemIcon>
-                <ListItemText primary="Usuários" />
-              </ListItem>
-            </List>
-          </Link>
+          {usuario?.tipo_usuario === 'admin' ? (
+            <Link to="/usuarios" className={classes.link}>
+              <List>
+                <ListItem
+                  button
+                  onClick={() => setChangePathName(true)}
+                  selected={pathName === 'usuarios'}
+                >
+                  <ListItemIcon>
+                    <Group className={classes.icon} />
+                  </ListItemIcon>
+                  <ListItemText primary="Usuários" />
+                </ListItem>
+              </List>
+            </Link>
+          ) : (
+            <div />
+          )}
 
           <Divider />
 
