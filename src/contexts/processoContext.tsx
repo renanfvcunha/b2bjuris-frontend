@@ -134,7 +134,9 @@ const ProcessoProvider: React.FC = ({ children }) => {
     observacoes: string
   ) => {
     const formProcess = new FormData();
+
     formProcess.append('status', status);
+
     if (arquivos !== []) {
       for (let i = 0; i < arquivos.length; i += 1) {
         formProcess.append('doc', arquivos[i]);

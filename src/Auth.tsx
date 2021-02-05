@@ -2,12 +2,17 @@ import React, { useContext } from 'react';
 
 import { AuthContext } from './contexts/authContext';
 import Menu from './components/Menu';
+import PrimeiroUsuario from './pages/Usuarios/PrimeiroUsuario';
 import Login from './pages/Login';
 
 const Auth: React.FC = () => {
-  const { signed } = useContext(AuthContext);
+  const { signed, hasUser } = useContext(AuthContext);
 
-  if (!signed) {
+  if (!hasUser) {
+    return <PrimeiroUsuario />;
+  }
+
+  if (hasUser && !signed) {
     return <Login />;
   }
 

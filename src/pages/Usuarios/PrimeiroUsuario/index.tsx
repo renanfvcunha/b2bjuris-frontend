@@ -1,33 +1,30 @@
-import React, { useState, useContext, FormEvent, ChangeEvent } from 'react';
+import React, { FormEvent, useContext, useState } from 'react';
 import {
   Button,
-  Checkbox,
   CircularProgress,
   Container,
   CssBaseline,
-  FormControlLabel,
   TextField,
+  Typography,
 } from '@material-ui/core';
 
 import useStyles from './styles';
-import { AuthContext } from '../../contexts/authContext';
+import { AuthContext } from '../../../contexts/authContext';
 
-const Login: React.FC = () => {
+const PrimeiroUsuario: React.FC = () => {
   const classes = useStyles();
-  const { loading, signIn } = useContext(AuthContext);
+  const { loading, storeFirstUser } = useContext(AuthContext);
 
+  const [nome, setNome] = useState('');
   const [nomeUsuario, setNomeUsuario] = useState('');
+  const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
-  const [lembrar, setLembrar] = useState(false);
+  const [confSenha, setConfSenha] = useState('');
 
-  const handleCheckLembrar = (e: ChangeEvent<HTMLInputElement>) => {
-    setLembrar(e.target.checked);
-  };
-
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    signIn(nomeUsuario, senha, lembrar);
+    storeFirstUser(nome, nomeUsuario, email, senha, confSenha);
   };
 
   return (
@@ -41,18 +38,49 @@ const Login: React.FC = () => {
             width="200"
             height="200"
           />
+
+          <Typography component="h1" variant="h6">
+            Bem-Vindo(a). Cadastre um novo usuário para começar.
+          </Typography>
+
           <form className={classes.form} noValidate onSubmit={handleSubmit}>
             <TextField
               variant="outlined"
               margin="normal"
               required
               fullWidth
+              id="name"
+              label="Nome"
+              name="nome"
+              autoFocus
+              value={nome}
+              onChange={e => setNome(e.target.value)}
+            />
+
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
               id="username"
-              label="Usuário ou E-mail"
+              label="Nome de Usuário"
               name="username"
               autoFocus
               value={nomeUsuario}
               onChange={e => setNomeUsuario(e.target.value)}
+            />
+
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="E-mail"
+              name="email"
+              autoFocus
+              value={email}
+              onChange={e => setEmail(e.target.value)}
             />
 
             <TextField
@@ -69,16 +97,18 @@ const Login: React.FC = () => {
               onChange={e => setSenha(e.target.value)}
             />
 
-            <FormControlLabel
-              control={
-                <Checkbox
-                  color="primary"
-                  checked={lembrar}
-                  onChange={handleCheckLembrar}
-                />
-              }
-              label="Lembrar"
-              labelPlacement="start"
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="confPassword"
+              label="Confirmar Senha"
+              type="password"
+              id="confPassword"
+              autoComplete="current-password"
+              value={confSenha}
+              onChange={e => setConfSenha(e.target.value)}
             />
 
             {loading ? (
@@ -96,7 +126,7 @@ const Login: React.FC = () => {
               color="primary"
               className={classes.submit}
             >
-              Entrar
+              Cadastrar e Entrar
             </Button>
           </form>
         </div>
@@ -105,4 +135,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default PrimeiroUsuario;

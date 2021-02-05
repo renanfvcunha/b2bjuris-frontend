@@ -51,10 +51,6 @@ const VisualizarEncaminhamento: React.FC = () => {
     }
   }, [success, getProcesso]);
 
-  /* const setSuccessTrue = () => {
-    setSuccess(true);
-  }; */
-
   const closeModal = () => {
     if (modalAlterarProcesso) {
       setModalAlterarProcesso(false);
@@ -67,10 +63,10 @@ const VisualizarEncaminhamento: React.FC = () => {
 
   const breakTextArea = (text: string, user: string) => {
     const newText = text.split('\n').map(str => (
-      <div key={Math.random()} className={classes.value}>
-        <span>{str}</span>
+      <Fragment key={Math.random()}>
+        <span className={classes.value}>{str}</span>
         <br />
-      </div>
+      </Fragment>
     ));
 
     return (
@@ -323,7 +319,9 @@ const VisualizarEncaminhamento: React.FC = () => {
           open={modalAlterarProcesso}
           close={closeModal}
           tipoProcesso={processo.tipo_processo}
-          idStatus={String(processo.status?.id)}
+          idStatus={
+            processo.status !== null ? String(processo.status?.id) : '0'
+          }
           idProcesso={id}
           refreshData={getProcesso}
         />

@@ -57,7 +57,7 @@ const AlterarProcesso: React.FC<IModal> = ({
       status: '',
     },
   ]);
-  const [statusSelected, setStatusSelected] = useState('');
+  const [statusSelected, setStatusSelected] = useState<string>('');
   const [arquivos, setArquivos] = useState<File[]>([]);
   const [arquivosUrl, setArquivosUrl] = useState([
     {
@@ -142,7 +142,9 @@ const AlterarProcesso: React.FC<IModal> = ({
 
   useEffect(() => {
     const getAllStatus = async () => {
-      const response = await api.get(`/status/?tipo=${tipoProcesso}`);
+      const response = await api.get(
+        `/status/?tipo=${tipoProcesso?.toLowerCase()}`
+      );
 
       setAllStatus(response.data);
       if (idStatus) {
@@ -186,6 +188,7 @@ const AlterarProcesso: React.FC<IModal> = ({
             value={statusSelected}
             onChange={handleSelectStatus}
           >
+            <MenuItem value="0">Sem Status</MenuItem>
             {allStatus.map(stts => (
               <MenuItem key={stts.id} value={String(stts.id)}>
                 {stts.status}
@@ -280,7 +283,7 @@ AlterarProcesso.propTypes = {
 
 AlterarProcesso.defaultProps = {
   tipoProcesso: '',
-  idStatus: '',
+  idStatus: '0',
   idProcesso: '',
 };
 
