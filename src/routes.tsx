@@ -6,7 +6,7 @@ import Processos from './pages/Processos';
 import NovoProcesso from './pages/Processos/NovoProcesso';
 import VisualizarProcesso from './pages/Processos/VisualizarProcesso';
 import Usuarios from './pages/Usuarios';
-import VisualizarEncaminhamento from './pages/VisualizarEncaminhamento';
+import VisualizarEncaminhamento from './pages/Encaminhamentos/VisualizarEncaminhamento';
 
 const Routes: React.FC = () => {
   return (

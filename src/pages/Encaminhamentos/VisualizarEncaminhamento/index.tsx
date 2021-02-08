@@ -22,10 +22,10 @@ import {
 } from '@material-ui/icons';
 
 import useStyles, { Purple, Buttons } from './styles';
-import { PageTitleContext } from '../../contexts/pageTitleContext';
-import DefaultBox from '../../components/DefaultBox';
-import IProcesso from '../../typescript/IProcesso';
-import api from '../../services/api';
+import { PageTitleContext } from '../../../contexts/pageTitleContext';
+import DefaultBox from '../../../components/DefaultBox';
+import IProcesso from '../../../typescript/IProcesso';
+import api from '../../../services/api';
 import AlterarProcesso from './AlterarProcesso';
 
 const VisualizarEncaminhamento: React.FC = () => {

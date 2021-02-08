@@ -23,10 +23,10 @@ import {
 import { RemoveCircle } from '@material-ui/icons';
 import { toast } from 'react-toastify';
 
-import DefaultModal from '../../../components/DefaultModal';
+import DefaultModal from '../../../../components/DefaultModal';
 import useStyles, { Red } from './styles';
-import api from '../../../services/api';
-import { ProcessoContext } from '../../../contexts/processoContext';
+import api from '../../../../services/api';
+import { ProcessoContext } from '../../../../contexts/processoContext';
 
 interface IModal {
   open: boolean;
