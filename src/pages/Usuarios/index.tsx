@@ -29,6 +29,7 @@ import api from '../../services/api';
 import { PageTitleContext } from '../../contexts/pageTitleContext';
 import NovoUsuario from './NovoUsuario';
 import ModalConfirmation from '../../components/ModalConfirmation';
+import EditarUsuario from './EditarUsuario';
 
 const Usuarios: React.FC = () => {
   const classes = useStyles();
@@ -36,10 +37,10 @@ const Usuarios: React.FC = () => {
   const { handleSetPageTitle } = useContext(PageTitleContext);
 
   const [newUserOpen, setNewUserOpen] = useState(false);
-  const [modalAlert, setModalAlert] = useState(false);
+  const [editUserOpen, setEditUserOpen] = useState(false);
   const [modalConfirmation, setModalConfirmation] = useState(false);
   const [name, setName] = useState('');
-  const [userToRemove, setUserToRemove] = useState(0);
+  const [selectedUser, setSelectedUser] = useState('0');
   const [success, setSuccess] = useState(false);
 
   const refreshTable = useCallback(() => {
@@ -52,14 +53,16 @@ const Usuarios: React.FC = () => {
     setSuccess(true);
   };
 
-  const handleCloseNewUser = () => {
-    setNewUserOpen(false);
-  };
-
   const handleCloseModal = () => {
-    if (modalAlert) {
-      setModalAlert(false);
-    } else if (modalConfirmation) {
+    if (newUserOpen) {
+      setNewUserOpen(false);
+    }
+
+    if (editUserOpen) {
+      setEditUserOpen(false);
+    }
+
+    if (modalConfirmation) {
       setModalConfirmation(false);
     }
   };
@@ -68,7 +71,7 @@ const Usuarios: React.FC = () => {
     setModalConfirmation(false);
 
     try {
-      const response = await api.delete(`/usuarios/${userToRemove}`);
+      const response = await api.delete(`/usuarios/${selectedUser}`);
 
       setSuccess(true);
 
@@ -214,8 +217,9 @@ const Usuarios: React.FC = () => {
                 {
                   icon: () => <Edit color="secondary" />,
                   tooltip: 'Editar Usuário',
-                  onClick: () => {
-                    alert('Usuário Editado');
+                  onClick: (event, rowData: any) => {
+                    setEditUserOpen(true);
+                    setSelectedUser(String(rowData.id));
                   },
                 },
                 {
@@ -224,7 +228,7 @@ const Usuarios: React.FC = () => {
                   onClick: (event, rowData: any) => {
                     setModalConfirmation(true);
                     setName(rowData.nome);
-                    setUserToRemove(rowData.id);
+                    setSelectedUser(String(rowData.id));
                   },
                 },
                 {
@@ -270,8 +274,14 @@ const Usuarios: React.FC = () => {
       </div>
       <NovoUsuario
         open={newUserOpen}
-        close={handleCloseNewUser}
+        close={handleCloseModal}
         setSuccess={setSuccessTrue}
+      />
+      <EditarUsuario
+        open={editUserOpen}
+        close={handleCloseModal}
+        setSuccess={setSuccessTrue}
+        idUser={selectedUser}
       />
       <ModalConfirmation
         open={modalConfirmation}
