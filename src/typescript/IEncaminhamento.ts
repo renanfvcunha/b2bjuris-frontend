@@ -8,7 +8,7 @@ export default interface IEncaminhamento {
   };
   processo: {
     id: number;
-    numero_processo: number;
+    numero_processo: string;
     tipo_processo: string;
     created_at: string;
   };

@@ -44,6 +44,8 @@ const AuthProvider: React.FC = ({ children }) => {
     setLoading(true);
 
     try {
+      window.history.pushState('', '', '/');
+
       const response = await api.post('/session', {
         nome_usuario,
         senha,
@@ -83,6 +85,7 @@ const AuthProvider: React.FC = ({ children }) => {
     localStorage.removeItem('@Auth:token');
 
     setUsuario(null);
+    window.history.pushState('', '', '/');
   };
 
   const checkHasUser = async () => {

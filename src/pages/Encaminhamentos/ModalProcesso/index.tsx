@@ -182,7 +182,7 @@ ModalProcesso.propTypes = {
     }).isRequired,
     processo: PropTypes.shape({
       id: PropTypes.number.isRequired,
-      numero_processo: PropTypes.number.isRequired,
+      numero_processo: PropTypes.string.isRequired,
       tipo_processo: PropTypes.string.isRequired,
       created_at: PropTypes.string.isRequired,
     }).isRequired,

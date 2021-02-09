@@ -1,5 +1,5 @@
 export default interface IProcesso {
-  numero_processo: number;
+  numero_processo: string;
   nome_parte: string;
   tipo_processo: string;
   observacoes: {
@@ -60,7 +60,7 @@ export default interface IProcesso {
   };
   oficio?: {
     processo_ref: {
-      numero_processo: number;
+      numero_processo: string;
     };
     secretaria: {
       secretaria: string;

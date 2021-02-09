@@ -37,7 +37,7 @@ const Encaminhamento: React.FC = () => {
     setSuccess(true);
   };
 
-  const handleSetSelectedEncaminhamento = async (i: number) => {
+  const handleSetSelectedEncaminhamento = (i: number) => {
     setSelectedEncaminhamento(encaminhamentos[i]);
   };
 
