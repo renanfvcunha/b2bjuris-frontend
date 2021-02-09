@@ -7,9 +7,10 @@ import {
   CssBaseline,
   FormControlLabel,
   TextField,
+  ThemeProvider,
 } from '@material-ui/core';
 
-import useStyles from './styles';
+import useStyles, { Theme } from './styles';
 import { AuthContext } from '../../contexts/authContext';
 
 const Login: React.FC = () => {
@@ -31,77 +32,80 @@ const Login: React.FC = () => {
   };
 
   return (
-    <main className={classes.content}>
-      <Container maxWidth="xs">
-        <CssBaseline />
-        <div className={classes.paper}>
-          <img
-            src="/assets/images/logoUnoCollect.png"
-            alt="Logo B2B Juris"
-            width="200"
-            height="200"
-          />
-          <form className={classes.form} noValidate onSubmit={handleSubmit}>
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="username"
-              label="Usuário ou E-mail"
-              name="username"
-              autoFocus
-              value={nomeUsuario}
-              onChange={e => setNomeUsuario(e.target.value)}
+    <ThemeProvider theme={Theme}>
+      <main className={classes.content}>
+        <Container maxWidth="xs">
+          <CssBaseline />
+          <div className={classes.paper}>
+            <img
+              src="/assets/images/b2bJurisLogo.png"
+              alt="Logo B2B Juris"
+              width="200"
+              height="200"
             />
+            <form className={classes.form} noValidate onSubmit={handleSubmit}>
+              <TextField
+                variant="filled"
+                margin="normal"
+                required
+                fullWidth
+                label="Usuário ou E-mail"
+                autoFocus
+                value={nomeUsuario}
+                onChange={e => setNomeUsuario(e.target.value)}
+                className={classes.input}
+                color="primary"
+              />
 
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Senha"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              value={senha}
-              onChange={e => setSenha(e.target.value)}
-            />
+              <TextField
+                variant="filled"
+                margin="normal"
+                required
+                fullWidth
+                label="Senha"
+                type="password"
+                autoComplete="current-password"
+                value={senha}
+                onChange={e => setSenha(e.target.value)}
+                className={classes.input}
+                color="primary"
+              />
 
-            <FormControlLabel
-              control={
-                <Checkbox
-                  color="primary"
-                  checked={lembrar}
-                  onChange={handleCheckLembrar}
-                />
-              }
-              label="Lembrar"
-              labelPlacement="start"
-            />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    color="primary"
+                    checked={lembrar}
+                    onChange={handleCheckLembrar}
+                  />
+                }
+                label="Lembrar"
+                labelPlacement="start"
+                className={classes.lembrar}
+              />
 
-            {loading ? (
-              <div className={classes.progress}>
-                <CircularProgress />
-              </div>
-            ) : (
-              ''
-            )}
+              {loading ? (
+                <div className={classes.progress}>
+                  <CircularProgress />
+                </div>
+              ) : (
+                ''
+              )}
 
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-            >
-              Entrar
-            </Button>
-          </form>
-        </div>
-      </Container>
-    </main>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+              >
+                Entrar
+              </Button>
+            </form>
+          </div>
+        </Container>
+      </main>
+    </ThemeProvider>
   );
 };
 

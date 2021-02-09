@@ -1,9 +1,12 @@
-import { makeStyles } from '@material-ui/core/styles';
+import { createMuiTheme, makeStyles } from '@material-ui/core/styles';
+
+import defaultStyles from '../../utils/defaultStyles';
 
 const useStyles = makeStyles(theme => ({
   content: {
-    backgroundColor: '#e7e7e7',
     minHeight: '100vh',
+    background: 'url("/assets/images/loginBackground.png")',
+    backgroundSize: 'cover',
   },
   paper: {
     paddingTop: theme.spacing(8),
@@ -15,6 +18,18 @@ const useStyles = makeStyles(theme => ({
     width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
+  input: {
+    '& .MuiInputBase-root': {
+      backgroundColor: '#e7e7e7',
+    },
+  },
+  lembrar: {
+    color: '#e7e7e7',
+    marginLeft: 0,
+    '& .MuiCheckbox-root': {
+      color: '#e7e7e7',
+    },
+  },
   progress: {
     display: 'flex',
     alignItems: 'center',
@@ -24,5 +39,16 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(3, 0, 2),
   },
 }));
+
+export const Theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: defaultStyles.purpleDark,
+    },
+    secondary: {
+      main: defaultStyles.purpleLight,
+    },
+  },
+});
 
 export default useStyles;

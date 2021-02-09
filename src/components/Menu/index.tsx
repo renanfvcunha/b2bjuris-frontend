@@ -88,7 +88,7 @@ const Menu: React.FC = () => {
               </Typography>
             </div>
             <img
-              src="/assets/images/logoUnoCollect.png"
+              src="/assets/images/b2bJurisLogo.png"
               alt="Logo B2B Juris"
               width="50"
               height="50"
