@@ -76,4 +76,15 @@ export const Buttons = createMuiTheme({
   },
 });
 
+export const ConfButtons = createMuiTheme({
+  palette: {
+    primary: {
+      main: blue['600'],
+    },
+    secondary: {
+      main: red['600'],
+    },
+  },
+});
+
 export default useStyles;

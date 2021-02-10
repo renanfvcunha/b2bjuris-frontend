@@ -20,13 +20,16 @@ import {
   Edit,
   AssignmentTurnedIn,
 } from '@material-ui/icons';
+import { toast } from 'react-toastify';
 
-import useStyles, { Purple, Buttons } from './styles';
+import useStyles, { Purple, Buttons, ConfButtons } from './styles';
 import { PageTitleContext } from '../../../contexts/pageTitleContext';
 import DefaultBox from '../../../components/DefaultBox';
 import IProcesso from '../../../typescript/IProcesso';
 import api from '../../../services/api';
 import AlterarProcesso from './AlterarProcesso';
+import ModalConfirmation from '../../../components/ModalConfirmation';
+import catchHandler from '../../../utils/catchHandler';
 
 const VisualizarEncaminhamento: React.FC = () => {
   const classes = useStyles();
@@ -37,12 +40,20 @@ const VisualizarEncaminhamento: React.FC = () => {
   const [processo, setProcesso] = useState<IProcesso>({} as IProcesso);
   const [modalAlterarProcesso, setModalAlterarProcesso] = useState(false);
   const [modalEncaminhar, setModalEncaminhar] = useState(false);
+  const [modalConfirmation, setModalConfirmation] = useState(false);
   const [success, setSuccess] = useState(false);
 
   const getProcesso = useCallback(async () => {
-    const response = await api.get(`/encaminhamentos/${id}`);
+    try {
+      const response = await api.get(`/encaminhamentos/${id}`);
 
-    setProcesso(response.data);
+      setProcesso(response.data);
+    } catch (err) {
+      catchHandler(
+        err,
+        'Não foi possível listar o processo. Tente novamente ou contate o suporte.'
+      );
+    }
   }, [id]);
 
   const refreshData = useCallback(() => {
@@ -58,6 +69,27 @@ const VisualizarEncaminhamento: React.FC = () => {
 
     if (modalEncaminhar) {
       setModalEncaminhar(false);
+    }
+
+    if (modalConfirmation) {
+      setModalConfirmation(false);
+    }
+  };
+
+  const handleFinishProcesso = async () => {
+    try {
+      const response = await api.patch(`/processos/${id}`, {
+        finalizado: true,
+      });
+
+      toast.success(response.data.msg);
+      closeModal();
+      history.push('/');
+    } catch (err) {
+      catchHandler(
+        err,
+        'Não foi possível finalizar o processo. Tente novamente ou contate o suporte.'
+      );
     }
   };
 
@@ -309,7 +341,12 @@ const VisualizarEncaminhamento: React.FC = () => {
                 Encaminhar
               </Button>
             </ThemeProvider>
-            <Button variant="contained" color="primary" className={classes.btn}>
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.btn}
+              onClick={() => setModalConfirmation(true)}
+            >
               <AssignmentTurnedIn className={classes.icon} />
               Finalizar Processo
             </Button>
@@ -325,6 +362,17 @@ const VisualizarEncaminhamento: React.FC = () => {
           idProcesso={id}
           refreshData={getProcesso}
         />
+        <ThemeProvider theme={ConfButtons}>
+          <ModalConfirmation
+            open={modalConfirmation}
+            close={closeModal}
+            confirmAction={handleFinishProcesso}
+            title="Alerta"
+            msg={`Deseja finalizar o processo nº ${processo.numero_processo}?`}
+            confirm="Finalizar"
+            cancel="Cancelar"
+          />
+        </ThemeProvider>
       </main>
     </ThemeProvider>
   );

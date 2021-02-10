@@ -43,7 +43,7 @@ const Login: React.FC = () => {
               width="200"
               height="200"
             />
-            <form className={classes.form} noValidate onSubmit={handleSubmit}>
+            <form className={classes.form} onSubmit={handleSubmit}>
               <TextField
                 variant="filled"
                 margin="normal"
