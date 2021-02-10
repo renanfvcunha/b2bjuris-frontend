@@ -112,12 +112,6 @@ const Processos: React.FC = () => {
               tableRef={tableRef}
               columns={[
                 {
-                  title: 'ID',
-                  field: 'id',
-                  type: 'numeric',
-                  align: 'left',
-                },
-                {
                   title: 'Nº do Processo',
                   field: 'numero_processo',
                   type: 'numeric',
