@@ -20,6 +20,7 @@ import DefaultModal from '../../../components/DefaultModal';
 import IUsuario from '../../../typescript/IUsuario';
 import useStyles, { Purple } from './styles';
 import api from '../../../services/api';
+import catchHandler from '../../../utils/catchHandler';
 
 interface IModal {
   open: boolean;
@@ -75,17 +76,10 @@ const EditarUsuario: React.FC<IModal> = ({
       clearFields();
       close();
     } catch (err) {
-      if (err.message === 'Network Error') {
-        toast.error(
-          'Não foi possível conectar ao servidor. Tente novamente ou contate o suporte.'
-        );
-      } else if (err.response) {
-        toast.error(err.response.data.msg);
-      } else {
-        toast.error(
-          'Erro ao cadastrar usuário. Tente novamente ou contate o suporte.'
-        );
-      }
+      catchHandler(
+        err,
+        'Erro ao cadastrar usuário. Tente novamente ou contate o suporte.'
+      );
     }
 
     setLoading(false);
@@ -93,9 +87,16 @@ const EditarUsuario: React.FC<IModal> = ({
 
   useEffect(() => {
     const getUser = async () => {
-      const response = await api.get(`/usuarios/${idUser}`);
+      try {
+        const response = await api.get(`/usuarios/${idUser}`);
 
-      setUsuario(response.data);
+        setUsuario(response.data);
+      } catch (err) {
+        catchHandler(
+          err,
+          'Não foi possível listar os dados do usuário. Tente novamente ou contate o suporte.'
+        );
+      }
     };
 
     getUser();

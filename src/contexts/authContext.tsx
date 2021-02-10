@@ -1,9 +1,9 @@
 import React, { useState, useEffect, createContext } from 'react';
-import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 
 import { AxiosResponse } from 'axios';
 import api from '../services/api';
+import catchHandler from '../utils/catchHandler';
 
 interface AuthContextData {
   signed: boolean;
@@ -62,17 +62,10 @@ const AuthProvider: React.FC = ({ children }) => {
         localStorage.setItem('@Auth:token', response.data.token);
       }
     } catch (err) {
-      if (err.message === 'Network Error') {
-        toast.error(
-          'Não foi possível conectar ao servidor. Tente novamente ou contate o suporte.'
-        );
-      } else if (err.response) {
-        toast.error(err.response.data.msg);
-      } else {
-        toast.error(
-          'Erro desconhecido ao fazer login. Tente novamente ou contate o suporte.'
-        );
-      }
+      catchHandler(
+        err,
+        'Erro desconhecido ao fazer login. Tente novamente ou contate o suporte.'
+      );
 
       setUsuario(null);
     }
@@ -89,11 +82,15 @@ const AuthProvider: React.FC = ({ children }) => {
   };
 
   const checkHasUser = async () => {
-    const response: AxiosResponse<{ hasUser: boolean }> = await api.get(
-      '/checkhasuser'
-    );
+    try {
+      const response: AxiosResponse<{ hasUser: boolean }> = await api.get(
+        '/checkhasuser'
+      );
 
-    setHasUser(response.data.hasUser);
+      setHasUser(response.data.hasUser);
+    } catch (err) {
+      setHasUser(true);
+    }
   };
 
   const storeFirstUser = async (
@@ -121,17 +118,10 @@ const AuthProvider: React.FC = ({ children }) => {
 
       setHasUser(true);
     } catch (err) {
-      if (err.message === 'Network Error') {
-        toast.error(
-          'Não foi possível conectar ao servidor. Tente novamente ou contate o suporte.'
-        );
-      } else if (err.response) {
-        toast.error(err.response.data.msg);
-      } else {
-        toast.error(
-          'Erro desconhecido ao cadastrar usuário. Tente novamente ou contate o suporte.'
-        );
-      }
+      catchHandler(
+        err,
+        'Erro desconhecido ao cadastrar usuário. Tente novamente ou contate o suporte.'
+      );
     }
 
     setLoading(false);

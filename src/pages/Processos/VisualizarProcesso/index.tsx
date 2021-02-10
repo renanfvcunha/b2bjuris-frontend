@@ -25,6 +25,7 @@ import api from '../../../services/api';
 import HistoricoProcesso from './HistoricoProcesso';
 import AlterarStatus from './AlterarStatus';
 import EncaminharProcesso from './EncaminharProcesso';
+import catchHandler from '../../../utils/catchHandler';
 
 const VisualizarProcesso: React.FC = () => {
   const classes = useStyles();
@@ -39,9 +40,16 @@ const VisualizarProcesso: React.FC = () => {
   const [success, setSuccess] = useState(false);
 
   const getProcesso = useCallback(async () => {
-    const response = await api.get(`/processos/${id}`);
+    try {
+      const response = await api.get(`/processos/${id}`);
 
-    setProcesso(response.data);
+      setProcesso(response.data);
+    } catch (err) {
+      catchHandler(
+        err,
+        'Não foi possível listar o processo. Tente novamente ou contate o suporte.'
+      );
+    }
   }, [id]);
 
   const refreshData = useCallback(() => {

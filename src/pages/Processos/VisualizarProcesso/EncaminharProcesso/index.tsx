@@ -14,6 +14,7 @@ import PropTypes from 'prop-types';
 import DefaultModal from '../../../../components/DefaultModal';
 import api from '../../../../services/api';
 import useStyles from './styles';
+import catchHandler from '../../../../utils/catchHandler';
 
 interface IModal {
   open: boolean;
@@ -63,15 +64,29 @@ const EncaminharProcesso: React.FC<IModal> = ({
   };
 
   const getProcuradores = async () => {
-    const response = await api.get('/procuradores');
+    try {
+      const response = await api.get('/procuradores');
 
-    setProcuradores(response.data);
+      setProcuradores(response.data);
+    } catch (err) {
+      catchHandler(
+        err,
+        'Não foi possível listar os procuradores. Tente novamente ou contate o suporte.'
+      );
+    }
   };
 
   const getTiposEncaminhamento = async () => {
-    const response = await api.get('/tiposencaminhamento');
+    try {
+      const response = await api.get('/tiposencaminhamento');
 
-    setTiposEncaminhamento(response.data);
+      setTiposEncaminhamento(response.data);
+    } catch (err) {
+      catchHandler(
+        err,
+        'Não foi possível listar os tipos de encaminhamento. Tente novamente ou contate o suporte.'
+      );
+    }
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -91,17 +106,10 @@ const EncaminharProcesso: React.FC<IModal> = ({
       setSuccess();
       close();
     } catch (err) {
-      if (err.message === 'Network Error') {
-        toast.error(
-          'Não foi possível conectar ao servidor. Tente novamente ou contate o suporte.'
-        );
-      } else if (err.response) {
-        toast.error(err.response.data.msg);
-      } else {
-        toast.error(
-          'Erro ao encaminhar processo. Tente novamente ou contate o suporte.'
-        );
-      }
+      catchHandler(
+        err,
+        'Erro ao encaminhar processo. Tente novamente ou contate o suporte.'
+      );
     }
   };
 

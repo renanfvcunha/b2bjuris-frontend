@@ -19,6 +19,7 @@ import PropTypes from 'prop-types';
 import DefaultModal from '../../../components/DefaultModal';
 import useStyles, { Purple } from './styles';
 import api from '../../../services/api';
+import catchHandler from '../../../utils/catchHandler';
 
 interface IModal {
   open: boolean;
@@ -71,17 +72,10 @@ const NovoUsuario: React.FC<IModal> = ({ open, close, setSuccess }) => {
       clearFields();
       close();
     } catch (err) {
-      if (err.message === 'Network Error') {
-        toast.error(
-          'Não foi possível conectar ao servidor. Tente novamente ou contate o suporte.'
-        );
-      } else if (err.response) {
-        toast.error(err.response.data.msg);
-      } else {
-        toast.error(
-          'Erro ao cadastrar usuário. Tente novamente ou contate o suporte.'
-        );
-      }
+      catchHandler(
+        err,
+        'Erro ao cadastrar usuário. Tente novamente ou contate o suporte.'
+      );
     }
 
     setLoading(false);

@@ -36,6 +36,7 @@ import api from '../../../services/api';
 import Administrativo from './Administrativo';
 import Judicial from './Judicial';
 import Oficio from './Oficio';
+import catchHandler from '../../../utils/catchHandler';
 
 const NovoProcesso: React.FC = () => {
   const classes = useStyles();
@@ -168,9 +169,16 @@ const NovoProcesso: React.FC = () => {
 
   useEffect(() => {
     const getAssuntos = async () => {
-      const response = await api.get('/assuntos');
+      try {
+        const response = await api.get('/assuntos');
 
-      setAssuntos(response.data);
+        setAssuntos(response.data);
+      } catch (err) {
+        catchHandler(
+          err,
+          'Não foi possível listar os assuntos de processos. Tente novamente ou contate o suporte.'
+        );
+      }
     };
 
     getAssuntos();

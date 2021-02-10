@@ -30,6 +30,7 @@ import useStyles, { theme } from './styles';
 import api from '../../services/api';
 import { PageTitleContext } from '../../contexts/pageTitleContext';
 import ModalConfirmation from '../../components/ModalConfirmation';
+import catchHandler from '../../utils/catchHandler';
 
 const Processos: React.FC = () => {
   const classes = useStyles();
@@ -62,17 +63,10 @@ const Processos: React.FC = () => {
 
       toast.success(response.data.msg);
     } catch (err) {
-      if (err.message === 'Network Error') {
-        toast.error(
-          'Não foi possível conectar ao servidor. Tente novamente ou contate o suporte.'
-        );
-      } else if (err.response) {
-        toast.error(err.response.data.msg);
-      } else {
-        toast.error(
-          'Erro ao remover processo. Tente novamente ou contate o suporte.'
-        );
-      }
+      catchHandler(
+        err,
+        'Erro ao remover processo. Tente novamente ou contate o suporte.'
+      );
     }
   };
 

@@ -8,7 +8,6 @@ import {
   Typography,
 } from '@material-ui/core';
 import { ArrowBack, CheckCircle, Visibility } from '@material-ui/icons';
-import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 
 import DefaultModal from '../../../components/DefaultModal';
@@ -16,6 +15,7 @@ import IEncaminhamento from '../../../typescript/IEncaminhamento';
 import useStyles, { Buttons } from './styles';
 import ModalConfirmation from '../../../components/ModalConfirmation';
 import api from '../../../services/api';
+import catchHandler from '../../../utils/catchHandler';
 
 interface IModal {
   open: boolean;
@@ -51,17 +51,10 @@ const ModalProcesso: React.FC<IModal> = ({
       setModalConfirmation(false);
       close();
     } catch (err) {
-      if (err.message === 'Network Error') {
-        toast.error(
-          'Não foi possível conectar ao servidor. Tente novamente ou contate o suporte.'
-        );
-      } else if (err.response) {
-        toast.error(err.response.data.msg);
-      } else {
-        toast.error(
-          'Erro ao marcar processo como recebido. Tente novamente ou contate o suporte.'
-        );
-      }
+      catchHandler(
+        err,
+        'Erro ao marcar processo como recebido. Tente novamente ou contate o suporte.'
+      );
     }
   };
 

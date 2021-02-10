@@ -30,7 +30,7 @@ const Home: React.FC = () => {
           variant="h4"
           className={classes.title}
         >
-          Home Page
+          Em Construção
         </Typography>
       </DefaultBox>
     </main>

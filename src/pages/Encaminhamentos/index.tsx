@@ -15,6 +15,7 @@ import useStyles from './styles';
 import ModalProcesso from './ModalProcesso';
 import IEncaminhamento from '../../typescript/IEncaminhamento';
 import api from '../../services/api';
+import catchHandler from '../../utils/catchHandler';
 
 const Encaminhamento: React.FC = () => {
   const classes = useStyles();
@@ -48,9 +49,16 @@ const Encaminhamento: React.FC = () => {
   }, [selectedEncaminhamento]);
 
   const getEncaminhamentos = async () => {
-    const response = await api.get('/encaminhamentos');
+    try {
+      const response = await api.get('/encaminhamentos');
 
-    setEncaminhamentos(response.data);
+      setEncaminhamentos(response.data);
+    } catch (err) {
+      catchHandler(
+        err,
+        'Não foi possível listar os encaminhamentos. Tente novamente ou contate o suporte.'
+      );
+    }
   };
 
   const refreshData = useCallback(() => {

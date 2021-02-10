@@ -27,6 +27,7 @@ import DefaultModal from '../../../../components/DefaultModal';
 import useStyles, { Red } from './styles';
 import api from '../../../../services/api';
 import { ProcessoContext } from '../../../../contexts/processoContext';
+import catchHandler from '../../../../utils/catchHandler';
 
 interface IModal {
   open: boolean;
@@ -142,11 +143,19 @@ const AlterarProcesso: React.FC<IModal> = ({
 
   useEffect(() => {
     const getAllStatus = async () => {
-      const response = await api.get(
-        `/status/?tipo=${tipoProcesso?.toLowerCase()}`
-      );
+      try {
+        const response = await api.get(
+          `/status/?tipo=${tipoProcesso?.toLowerCase()}`
+        );
 
-      setAllStatus(response.data);
+        setAllStatus(response.data);
+      } catch (err) {
+        catchHandler(
+          err,
+          'Não foi possível listar os status de processo. Tente novamente ou contate o suporte.'
+        );
+      }
+
       if (idStatus) {
         setStatusSelected(idStatus);
       }

@@ -13,6 +13,7 @@ import { AxiosResponse } from 'axios';
 import DefaultModal from '../../../../components/DefaultModal';
 import useStyles from './styles';
 import api from '../../../../services/api';
+import catchHandler from '../../../../utils/catchHandler';
 
 interface IModal {
   open: boolean;
@@ -60,25 +61,27 @@ const AlterarStatus: React.FC<IModal> = ({
       setSuccess();
       close();
     } catch (err) {
-      if (err.message === 'Network Error') {
-        toast.error(
-          'Não foi possível conectar ao servidor. Tente novamente ou contate o suporte.'
-        );
-      } else if (err.response) {
-        toast.error(err.response.data.msg);
-      } else {
-        toast.error(
-          'Erro ao alterar status. Tente novamente ou contate o suporte.'
-        );
-      }
+      catchHandler(
+        err,
+        'Erro ao alterar status. Tente novamente ou contate o suporte.'
+      );
     }
   };
 
   useEffect(() => {
     const getAllStatus = async () => {
-      const response = await api.get(`/status/?tipo=${tipoProcesso}`);
+      try {
+        const response = await api.get(
+          `/status/?tipo=${tipoProcesso?.toLowerCase()}`
+        );
 
-      setAllStatus(response.data);
+        setAllStatus(response.data);
+      } catch (err) {
+        catchHandler(
+          err,
+          'Não foi possível listar os status de processos. Tente novamente ou contate o suporte.'
+        );
+      }
     };
     getAllStatus();
   }, [tipoProcesso]);

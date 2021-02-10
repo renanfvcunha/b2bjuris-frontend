@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 import api from '../services/api';
 import masks from '../utils/masks';
+import catchHandler from '../utils/catchHandler';
 
 interface IProcesso {
   processo: {
@@ -113,17 +114,10 @@ const ProcessoProvider: React.FC = ({ children }) => {
       toast.success(response.data.msg);
       setSuccess(true);
     } catch (err) {
-      if (err.message === 'Network Error') {
-        toast.error(
-          'Não foi possível conectar ao servidor. Tente novamente ou contate o suporte.'
-        );
-      } else if (err.response) {
-        toast.error(err.response.data.msg);
-      } else {
-        toast.error(
-          'Erro ao cadastrar processo. Tente novamente ou contate o suporte.'
-        );
-      }
+      catchHandler(
+        err,
+        'Erro ao cadastrar processo. Tente novamente ou contate o suporte.'
+      );
     }
   };
 
@@ -156,17 +150,10 @@ const ProcessoProvider: React.FC = ({ children }) => {
       toast.success(response.data.msg);
       setSuccess(true);
     } catch (err) {
-      if (err.message === 'Network Error') {
-        toast.error(
-          'Não foi possível conectar ao servidor. Tente novamente ou contate o suporte.'
-        );
-      } else if (err.response) {
-        toast.error(err.response.data.msg);
-      } else {
-        toast.error(
-          'Erro ao alterar processo. Tente novamente ou contate o suporte.'
-        );
-      }
+      catchHandler(
+        err,
+        'Erro ao alterar processo. Tente novamente ou contate o suporte.'
+      );
     }
   };
 
