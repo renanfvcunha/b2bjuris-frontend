@@ -6,9 +6,10 @@ import {
   CssBaseline,
   TextField,
   Typography,
+  ThemeProvider,
 } from '@material-ui/core';
 
-import useStyles from './styles';
+import useStyles, { Theme } from './styles';
 import { AuthContext } from '../../../contexts/authContext';
 
 const PrimeiroUsuario: React.FC = () => {
@@ -28,110 +29,107 @@ const PrimeiroUsuario: React.FC = () => {
   };
 
   return (
-    <main className={classes.content}>
-      <Container maxWidth="xs">
-        <CssBaseline />
-        <div className={classes.paper}>
-          <img
-            src="/assets/images/logoUnoCollect.png"
-            alt="Logo B2B Juris"
-            width="200"
-            height="200"
-          />
-
-          <Typography component="h1" variant="h6">
-            Bem-Vindo(a). Cadastre um novo usuário para começar.
-          </Typography>
-
-          <form className={classes.form} noValidate onSubmit={handleSubmit}>
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="name"
-              label="Nome"
-              name="nome"
-              autoFocus
-              value={nome}
-              onChange={e => setNome(e.target.value)}
+    <ThemeProvider theme={Theme}>
+      <main className={classes.content}>
+        <Container maxWidth="xs">
+          <CssBaseline />
+          <div className={classes.paper}>
+            <img
+              src="/assets/images/b2bJurisLogo.png"
+              alt="Logo B2B Juris"
+              width="200"
+              height="200"
             />
 
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="username"
-              label="Nome de Usuário"
-              name="username"
-              autoFocus
-              value={nomeUsuario}
-              onChange={e => setNomeUsuario(e.target.value)}
-            />
+            <Typography component="h1" variant="h6" className={classes.title}>
+              Bem-Vindo(a). Cadastre um novo usuário para começar.
+            </Typography>
 
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="E-mail"
-              name="email"
-              autoFocus
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-            />
+            <form className={classes.form} onSubmit={handleSubmit}>
+              <TextField
+                variant="filled"
+                margin="normal"
+                required
+                fullWidth
+                label="Nome"
+                autoFocus
+                value={nome}
+                onChange={e => setNome(e.target.value)}
+                className={classes.input}
+              />
 
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Senha"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              value={senha}
-              onChange={e => setSenha(e.target.value)}
-            />
+              <TextField
+                variant="filled"
+                margin="normal"
+                required
+                fullWidth
+                label="Nome de Usuário"
+                autoFocus
+                value={nomeUsuario}
+                onChange={e => setNomeUsuario(e.target.value)}
+                className={classes.input}
+              />
 
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="confPassword"
-              label="Confirmar Senha"
-              type="password"
-              id="confPassword"
-              autoComplete="current-password"
-              value={confSenha}
-              onChange={e => setConfSenha(e.target.value)}
-            />
+              <TextField
+                variant="filled"
+                margin="normal"
+                required
+                fullWidth
+                label="E-mail"
+                autoFocus
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                className={classes.input}
+              />
 
-            {loading ? (
-              <div className={classes.progress}>
-                <CircularProgress />
-              </div>
-            ) : (
-              ''
-            )}
+              <TextField
+                variant="filled"
+                margin="normal"
+                required
+                fullWidth
+                label="Senha"
+                type="password"
+                autoComplete="current-password"
+                value={senha}
+                onChange={e => setSenha(e.target.value)}
+                className={classes.input}
+              />
 
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-            >
-              Cadastrar e Entrar
-            </Button>
-          </form>
-        </div>
-      </Container>
-    </main>
+              <TextField
+                variant="filled"
+                margin="normal"
+                required
+                fullWidth
+                label="Confirmar Senha"
+                type="password"
+                autoComplete="current-password"
+                value={confSenha}
+                onChange={e => setConfSenha(e.target.value)}
+                className={classes.input}
+              />
+
+              {loading ? (
+                <div className={classes.progress}>
+                  <CircularProgress />
+                </div>
+              ) : (
+                ''
+              )}
+
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+              >
+                Cadastrar e Entrar
+              </Button>
+            </form>
+          </div>
+        </Container>
+      </main>
+    </ThemeProvider>
   );
 };
 
