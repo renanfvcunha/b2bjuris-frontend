@@ -329,16 +329,17 @@ const VisualizarProcesso: React.FC = () => {
           </div>
 
           <div className={classes.buttons}>
-            {(processo.administrativo || processo.judicial) && (
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => setModalStatus(true)}
-              >
-                <Edit style={{ marginRight: 8 }} />
-                Alterar Status
-              </Button>
-            )}
+            {(processo.administrativo || processo.judicial) &&
+              !processo.finalizado && (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => setModalStatus(true)}
+                >
+                  <Edit style={{ marginRight: 8 }} />
+                  Alterar Status
+                </Button>
+              )}
             <ThemeProvider theme={Buttons}>
               <Button
                 variant="contained"
@@ -349,15 +350,17 @@ const VisualizarProcesso: React.FC = () => {
                 <Search style={{ marginRight: 8 }} />
                 Consultar Histórico
               </Button>
-              <Button
-                variant="contained"
-                color="secondary"
-                className={classes.btn}
-                onClick={() => setModalEncaminhar(true)}
-              >
-                <Forward style={{ marginRight: 8 }} />
-                Encaminhar
-              </Button>
+              {!processo.finalizado && (
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  className={classes.btn}
+                  onClick={() => setModalEncaminhar(true)}
+                >
+                  <Forward style={{ marginRight: 8 }} />
+                  Encaminhar
+                </Button>
+              )}
             </ThemeProvider>
           </div>
         </DefaultBox>
@@ -366,20 +369,24 @@ const VisualizarProcesso: React.FC = () => {
           close={closeModal}
           historico={processo.historico}
         />
-        <AlterarStatus
-          open={modalStatus}
-          close={closeModal}
-          idProcesso={id}
-          tipoProcesso={processo.tipo_processo}
-          status={processo.status}
-          setSuccess={setSuccessTrue}
-        />
-        <EncaminharProcesso
-          open={modalEncaminhar}
-          idProcesso={id}
-          close={closeModal}
-          setSuccess={setSuccessTrue}
-        />
+        {!processo.finalizado && (
+          <AlterarStatus
+            open={modalStatus}
+            close={closeModal}
+            idProcesso={id}
+            tipoProcesso={processo.tipo_processo}
+            status={processo.status}
+            setSuccess={setSuccessTrue}
+          />
+        )}
+        {!processo.finalizado && (
+          <EncaminharProcesso
+            open={modalEncaminhar}
+            idProcesso={id}
+            close={closeModal}
+            setSuccess={setSuccessTrue}
+          />
+        )}
       </main>
     </ThemeProvider>
   );

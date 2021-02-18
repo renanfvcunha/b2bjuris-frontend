@@ -2,6 +2,7 @@ export default interface IProcesso {
   numero_processo: string;
   nome_parte: string;
   tipo_processo: string;
+  finalizado: boolean;
   observacoes: {
     id: number;
     observacoes: string;
