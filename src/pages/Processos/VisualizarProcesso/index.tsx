@@ -93,6 +93,29 @@ const VisualizarProcesso: React.FC = () => {
     );
   };
 
+  const handleGetFile = async (nome: string) => {
+    try {
+      const response = await api.get(`/docs/${nome}`, {
+        responseType: 'blob',
+      });
+
+      const blob = new Blob([response.data]);
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.style.display = 'none';
+      a.href = url;
+      a.download = nome;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      catchHandler(
+        err,
+        'Não foi possível baixar o anexo. Tente novamente ou contate o suporte.'
+      );
+    }
+  };
+
   useEffect(() => {
     document.title = 'Visualizar Processo - B2B Juris';
     handleSetPageTitle('Visualizar Processo');
@@ -161,10 +184,14 @@ const VisualizarProcesso: React.FC = () => {
               <span style={{ marginLeft: 8 }}>
                 {processo.arquivo && processo.arquivo.length !== 0 ? (
                   processo.arquivo.map(arquivo => (
-                    <span key={arquivo.id}>
-                      <a href={arquivo.url}>{arquivo.nome}</a>
-                      ,&nbsp;
-                    </span>
+                    <button
+                      key={arquivo.id}
+                      type="button"
+                      onClick={() => handleGetFile(arquivo.nome)}
+                      className={classes.btnDownloadFile}
+                    >
+                      {arquivo.nome}
+                    </button>
                   ))
                 ) : (
                   <span className={classes.value} style={{ marginLeft: 0 }}>

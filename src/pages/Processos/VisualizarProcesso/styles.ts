@@ -35,6 +35,11 @@ const useStyles = makeStyles(theme => ({
     marginLeft: 8,
     fontWeight: 500,
   },
+  btnDownloadFile: {
+    padding: 0,
+    cursor: 'pointer',
+    marginRight: 8,
+  },
   textRed: {
     color: red['500'],
   },
