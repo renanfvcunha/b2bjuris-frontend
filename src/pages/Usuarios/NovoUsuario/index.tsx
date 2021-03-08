@@ -145,6 +145,7 @@ const NovoUsuario: React.FC<IModal> = ({ open, close, setSuccess }) => {
                 >
                   <MenuItem value="admin">Administrador</MenuItem>
                   <MenuItem value="procurador">Procurador</MenuItem>
+                  <MenuItem value="procurador_geral">Procurador Geral</MenuItem>
                   <MenuItem value="usuario">Usuário Comum</MenuItem>
                 </Select>
               </FormControl>
