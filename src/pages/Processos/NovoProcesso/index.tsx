@@ -217,6 +217,35 @@ const NovoProcesso: React.FC = () => {
             Novo Processo
           </Typography>
 
+          <div className={classes.tipoProcesso}>
+            <FormControl component="fieldset" required>
+              <div className={classes.tipoProcessoItems}>
+                <FormLabel component="legend">Tipo de Processo</FormLabel>
+                <RadioGroup
+                  style={{ display: 'inline' }}
+                  value={processo.tipoProcesso}
+                  onChange={handleChangeTipoProcesso}
+                >
+                  <FormControlLabel
+                    value="administrativo"
+                    control={<Radio />}
+                    label="Administrativo"
+                  />
+                  <FormControlLabel
+                    value="judicial"
+                    control={<Radio />}
+                    label="Judicial"
+                  />
+                  <FormControlLabel
+                    value="oficio"
+                    control={<Radio />}
+                    label="Ofício"
+                  />
+                </RadioGroup>
+              </div>
+            </FormControl>
+          </div>
+
           <form encType="multipart/formdata" onSubmit={handleSubmit}>
             <div className={classes.fieldsBox}>
               <TextField
@@ -325,35 +354,6 @@ const NovoProcesso: React.FC = () => {
             ) : (
               <div />
             )}
-
-            <div className={classes.tipoProcesso}>
-              <FormControl component="fieldset" required>
-                <div className={classes.tipoProcessoItems}>
-                  <FormLabel component="legend">Tipo de Processo</FormLabel>
-                  <RadioGroup
-                    style={{ display: 'inline' }}
-                    value={processo.tipoProcesso}
-                    onChange={handleChangeTipoProcesso}
-                  >
-                    <FormControlLabel
-                      value="administrativo"
-                      control={<Radio />}
-                      label="Administrativo"
-                    />
-                    <FormControlLabel
-                      value="judicial"
-                      control={<Radio />}
-                      label="Judicial"
-                    />
-                    <FormControlLabel
-                      value="oficio"
-                      control={<Radio />}
-                      label="Ofício"
-                    />
-                  </RadioGroup>
-                </div>
-              </FormControl>
-            </div>
 
             {processo.tipoProcesso === 'administrativo' ? (
               <Administrativo

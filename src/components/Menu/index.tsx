@@ -23,6 +23,7 @@ import {
   Group,
   ExitToApp,
   Assignment,
+  LockOpen,
 } from '@material-ui/icons';
 
 import { useStyles, Purple } from './styles';
@@ -171,6 +172,25 @@ const Menu: React.FC = () => {
                     <Group className={classes.icon} />
                   </ListItemIcon>
                   <ListItemText primary="Usuários" />
+                </ListItem>
+              </List>
+            </Link>
+          ) : (
+            <div />
+          )}
+
+          {usuario?.tipo_usuario !== 'admin' ? (
+            <Link to="/alterarsenha" className={classes.link}>
+              <List>
+                <ListItem
+                  button
+                  onClick={() => setChangePathName(true)}
+                  selected={pathName === 'alterarsenha'}
+                >
+                  <ListItemIcon>
+                    <LockOpen className={classes.icon} />
+                  </ListItemIcon>
+                  <ListItemText primary="Alterar Senha" />
                 </ListItem>
               </List>
             </Link>

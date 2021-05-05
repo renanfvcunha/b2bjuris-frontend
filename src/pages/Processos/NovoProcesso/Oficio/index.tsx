@@ -82,6 +82,26 @@ const Oficio: React.FC<IOficio> = ({ oficio, setOficio }) => {
 
   return (
     <div className={classes.fieldsBox}>
+      <FormControl
+        variant="outlined"
+        style={{ minWidth: 160 }}
+        className={classes.field}
+      >
+        <InputLabel id="secretaria-select-label">Secretaria</InputLabel>
+        <Select
+          labelId="secretaria-select-label"
+          label="Secretaria"
+          value={oficio.secretaria}
+          onChange={handleSelectSecretaria}
+        >
+          {secretarias.map(secretaria => (
+            <MenuItem key={secretaria.id} value={String(secretaria.id)}>
+              {secretaria.secretaria}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
       <Autocomplete
         options={referencias}
         getOptionLabel={option => String(option.numero_processo)}
@@ -102,26 +122,6 @@ const Oficio: React.FC<IOficio> = ({ oficio, setOficio }) => {
           />
         )}
       />
-
-      <FormControl
-        variant="outlined"
-        style={{ minWidth: 160 }}
-        className={classes.field}
-      >
-        <InputLabel id="secretaria-select-label">Secretaria</InputLabel>
-        <Select
-          labelId="secretaria-select-label"
-          label="Secretaria"
-          value={oficio.secretaria}
-          onChange={handleSelectSecretaria}
-        >
-          {secretarias.map(secretaria => (
-            <MenuItem key={secretaria.id} value={String(secretaria.id)}>
-              {secretaria.secretaria}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
     </div>
   );
 };
