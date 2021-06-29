@@ -41,7 +41,7 @@ const Usuarios: React.FC = () => {
   const [editUserOpen, setEditUserOpen] = useState(false);
   const [modalConfirmation, setModalConfirmation] = useState(false);
   const [name, setName] = useState('');
-  const [selectedUser, setSelectedUser] = useState('0');
+  const [selectedUser, setSelectedUser] = useState<string>();
   const [success, setSuccess] = useState(false);
 
   const refreshTable = useCallback(() => {
@@ -271,12 +271,14 @@ const Usuarios: React.FC = () => {
         close={handleCloseModal}
         setSuccess={setSuccessTrue}
       />
-      <EditarUsuario
-        open={editUserOpen}
-        close={handleCloseModal}
-        setSuccess={setSuccessTrue}
-        idUser={selectedUser}
-      />
+      {selectedUser && (
+        <EditarUsuario
+          open={editUserOpen}
+          close={handleCloseModal}
+          setSuccess={setSuccessTrue}
+          idUser={selectedUser}
+        />
+      )}
       <ModalConfirmation
         open={modalConfirmation}
         close={handleCloseModal}

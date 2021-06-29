@@ -26,7 +26,7 @@ interface IModal {
   open: boolean;
   close(): void;
   setSuccess(): void;
-  idUser?: string;
+  idUser: string;
 }
 
 const EditarUsuario: React.FC<IModal> = ({
@@ -133,7 +133,7 @@ const EditarUsuario: React.FC<IModal> = ({
                 align="center"
                 color="secondary"
               >
-                Editar {usuario ? usuario.nome.split(' ')[0] : ''}
+                Editar {nome.split(' ')[0] || ''}
               </Typography>
 
               <TextField
@@ -224,11 +224,7 @@ EditarUsuario.propTypes = {
   open: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
   setSuccess: PropTypes.func.isRequired,
-  idUser: PropTypes.string,
-};
-
-EditarUsuario.defaultProps = {
-  idUser: '',
+  idUser: PropTypes.string.isRequired,
 };
 
 export default EditarUsuario;
