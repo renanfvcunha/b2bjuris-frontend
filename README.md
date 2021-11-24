@@ -1,46 +1,145 @@
-# Getting Started with Create React App
+<img
+  src="./public/assets/images/b2bJurisLogo.png"
+  width="300"
+  style="display: block; margin-left: auto; margin-right: auto;"
+/>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# B2B Juris - Frontend
 
-## Available Scripts
+## Sobre o Projeto
 
-In the project directory, you can run:
+O sistema web B2B Juris foi desenvolvido com a finalidade de auxiliar na
+movimentação de processos jurídicos de uma procuradoria na cidade de Timon-MA.
 
-### `yarn start`
+O projeto atual é um cliente web onde os usuários credendiados poderão interagir
+com o sistema.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Tecnologias e Estrutura
+O projeto foi escrito utilizando as seguintes tecnologias:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+* Linguagem: [Typescript](https://www.typescriptlang.org/)
+* Biblioteca: [ReactJS](https://pt-br.reactjs.org/)
+  (inicializado com o [Create React App](https://create-react-app.dev/))
+* Biblioteca de Componentes: [Material-UI v4](https://v4.mui.com/pt/)
 
-### `yarn test`
+O projeto foi escrito utilizando o padrão de hooks do react (React Hooks)
+utilizando componentes funcionais. Dentre as pastas do projeto, se destacam:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+* src: Pasta principal que contém todos os arquivos importantes do projeto.
+* src/components: Pasta onde se localizam componentes reutilizáveis.
+* src/contexts: Pasta que contém algumas APIs de contexto.
+* src/pages: Pasta que contém as páginas do sistema, definidas no arquivo
+  routes.tsx.
+* src/services: Pasta que contém os providers utilizados no sistema.
+* src/typescript: Pasta que contém as tipagens e interfaces utilizadas pelo
+  typescript.
+* src/utils: Pasta que contém funções utilitárias.
 
-### `yarn build`
+## Como executar o projeto
+### Desenvolvimento
+1. Instalar as dependências.
+```bash
+$ npm i
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+$ yarn
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+2. Copiar o arquivo .env.example nomeando como .env e setar as variáveis de
+   ambiente necessárias.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+3. Iniciar o projeto
+```bash
+$ npm run start
 
-### `yarn eject`
+$ yarn start
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+4. Após isso o projeto estará pronto para ser utilizado em desenvolvimento.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Produção
+1. Instalar as dependências.
+```bash
+$ npm i
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+$ yarn
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+2. Copiar o arquivo .env.example nomeando como .env e setar as variáveis de
+   ambiente necessárias.
 
-## Learn More
+3. Gerar a build de produção
+```bash
+$ npm run build
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+$ yarn build
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+4. Iniciar o conteúdo da pasta gerada `build` utilizando algum servidor web.
+
+5. Após isso o projeto estará pronto para ser utilizado em produção.
+
+<img
+  src="./demo/demo01.png"
+  width="800"
+  style="display: block; margin-left: auto; margin-right: auto;"
+/>
+
+<img
+  src="./demo/demo02.png"
+  width="800"
+  style="display: block; margin-left: auto; margin-right: auto;"
+/>
+
+<img
+  src="./demo/demo03.png"
+  width="800"
+  style="display: block; margin-left: auto; margin-right: auto;"
+/>
+
+<img
+  src="./demo/demo04.png"
+  width="800"
+  style="display: block; margin-left: auto; margin-right: auto;"
+/>
+
+<img
+  src="./demo/demo05.png"
+  width="800"
+  style="display: block; margin-left: auto; margin-right: auto;"
+/>
+
+<img
+  src="./demo/demo06.png"
+  width="800"
+  style="display: block; margin-left: auto; margin-right: auto;"
+/>
+
+<img
+  src="./demo/demo07.png"
+  width="800"
+  style="display: block; margin-left: auto; margin-right: auto;"
+/>
+
+<img
+  src="./demo/demo08.png"
+  width="800"
+  style="display: block; margin-left: auto; margin-right: auto;"
+/>
+
+<img
+  src="./demo/demo09.png"
+  width="800"
+  style="display: block; margin-left: auto; margin-right: auto;"
+/>
+
+<img
+  src="./demo/demo10.png"
+  width="800"
+  style="display: block; margin-left: auto; margin-right: auto;"
+/>
+
+<img
+  src="./demo/demo11.png"
+  width="800"
+  style="display: block; margin-left: auto; margin-right: auto;"
+/>
